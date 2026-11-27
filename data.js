@@ -215,7 +215,7 @@ window.CARD_DATA = {
     },
     {
       "id": "stats",
-      "show": true
+      "show": false
     },
     {
       "id": "about",
@@ -231,25 +231,25 @@ window.CARD_DATA = {
     },
     {
       "id": "office",
-      "show": true
+      "show": false
     },
     {
       "id": "consult",
-      "show": true
+      "show": false
     }
   ],
   "show": {
-    "shareTop": true,
-    "langToggle": true,
-    "photo": true,
-    "verified": true,
-    "title": true,
     "tagline": true,
-    "status": true,
-    "address": true,
+    "status": false,
+    "verified": true,
     "map": true,
     "mapLinks": true,
     "hours": true,
+    "shareTop": true,
+    "langToggle": true,
+    "photo": true,
+    "title": true,
+    "address": true,
     "shareBtn": true,
     "footer": true
   }
