@@ -1,10 +1,10 @@
 window.CARD_DATA = {
   "firstName": {
-    "fa": "امیرصادق",
+    "fa": "مهدی ",
     "en": "Amirsadeq"
   },
   "lastName": {
-    "fa": "نام‌خانوادگی",
+    "fa": "رحمانی",
     "en": "Lastname"
   },
   "title": {
@@ -160,5 +160,4 @@ window.CARD_DATA = {
       }
     }
   ]
-}
-;
+};
