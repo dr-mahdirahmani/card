@@ -125,6 +125,13 @@ html[dir=rtl] .sw input:checked+span::after{transform:translateX(-17px)}
 .toggles{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
 @media (max-width:520px){ .toggles{grid-template-columns:1fr} }
 .tg{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0;padding:10px 12px;border-radius:12px;border:1px solid var(--line2);background:rgba(255,255,255,.02);font-size:13px;color:var(--text);cursor:pointer}
+.sec>h2 .sw{margin-inline-start:auto}
+.sec>h2 .shw{margin-inline-start:auto;display:flex;align-items:center;gap:8px;font-size:12px;font-weight:500;color:var(--muted)}
+.sec.hidden-sec{border-style:dashed}
+.sec.hidden-sec>h2{opacity:.6}
+.tg-h{font-size:12.5px;color:var(--gold);margin:16px 2px 0;font-weight:600}
+.tg-h:first-child{margin-top:8px}
+.toggles{margin-top:8px}
 .ct-h{display:inline-flex;align-items:center;gap:7px}
 .ct-h svg{width:16px;height:16px}
 
@@ -227,7 +234,7 @@ function normalize(d){
   if (!Array.isArray(d.layout)) d.layout = SECTIONS.map(id => ({ id, show:true }));
   d.layout = d.layout.filter(x => SECTIONS.includes(x.id));
   SECTIONS.forEach(id => { if (!d.layout.some(x => x.id === id)) d.layout.push({ id, show:false }); });
-  d.show = Object.assign({ tagline:true, status:true, verified:true, map:true, mapLinks:true, hours:true }, d.show || {});
+  d.show = Object.assign({ shareTop:true, langToggle:true, photo:true, verified:true, title:true, tagline:true, status:true, address:true, map:true, mapLinks:true, hours:true, shareBtn:true, footer:true }, d.show || {});
   ['stats','areas','experience'].forEach(k => { if (!Array.isArray(d[k])) d[k] = []; });
   d.hours = d.hours || {};
   d.location = d.location || { lat:35.6892, lng:51.3890 };
@@ -243,10 +250,12 @@ const SECTION_INFO = {
   office:    ['دفتر، نقشه و ساعات کاری', 'pin'],
   consult:   ['فرم درخواست مشاوره', 'chat'],
 };
-const SHOW_INFO = {
-  tagline:'شعار زیر نام', status:'وضعیت «در دسترس / تعطیل»', verified:'نشان تیک طلایی روی عکس',
-  map:'نقشه‌ی داخل صفحه', mapLinks:'دکمه‌های گوگل‌مپ / نشان / بلد', hours:'جدول ساعات کاری',
-};
+const SHOW_GROUPS = [
+  ['نوار بالای صفحه', { shareTop:'دکمه‌ی «اشتراک»', langToggle:'دکمه‌ی تغییر زبان (EN / فا)' }],
+  ['سربرگ کارت', { photo:'عکس / حرف اول نام', verified:'تیک طلایی روی عکس', title:'عنوان (مثلاً وکیل پایه یک)', tagline:'شعار زیر نام', status:'وضعیت «در دسترس / تعطیل»' }],
+  ['دفتر و ساعات کاری', { address:'آدرس', map:'نقشه‌ی داخل صفحه', mapLinks:'دکمه‌های گوگل‌مپ / نشان / بلد', hours:'جدول ساعات کاری' }],
+  ['سایر', { shareBtn:'دکمه‌ی اشتراک کنار «ذخیره در مخاطبین»', footer:'پانویس پایین صفحه' }],
+];
 const CONTACT_TYPES = {
   phone:    { n:'تلفن / موبایل', icon:'phone',     ph:'+989120000000', hint:'با کد کشور' },
   whatsapp: { n:'واتساپ',        icon:'whatsapp',  ph:'989120000000',  hint:'بدون + و بدون صفر اول' },
@@ -512,7 +521,13 @@ const ops = (list, i, len, canDel = true) => `<div class="ops">
   <button type="button" data-op="down" data-l="${list}" data-i="${i}" ${i === len - 1 ? 'disabled' : ''} title="پایین">${ic('down')}</button>
   ${canDel ? `<button type="button" class="del" data-op="del" data-l="${list}" data-i="${i}" title="حذف">${ic('x')}</button>` : ''}</div>`;
 const sw = (p, on) => `<label class="sw"><input type="checkbox" data-p="${p}" data-bool="1" ${on ? 'checked' : ''}><span></span></label>`;
-const sec = (icon, title, desc, body) => `<section class="sec"><h2>${ic(icon)}${title}</h2>${desc ? `<p>${desc}</p>` : ''}${body}</section>`;
+/* toggle: مسیر یک مقدار true/false — کلید «نمایش در کارت» در سربرگ بخش */
+const sec = (icon, title, desc, body, toggle) => {
+  const on = toggle ? !!getP(DATA, toggle) : true;
+  return `<section class="sec ${on ? '' : 'hidden-sec'}"><h2>${ic(icon)}${title}${toggle
+    ? `<span class="shw">${on ? 'نمایش در کارت' : 'مخفی'}${sw(toggle, on)}</span>` : ''}</h2>${desc ? `<p>${desc}</p>` : ''}${body}</section>`;
+};
+const layoutP = id => `layout.${DATA.layout.findIndex(x => x.id === id)}.show`;
 
 function photoPreview(){
   const src = pendingPhoto || (DATA.photo ? DATA.photo : '');
@@ -552,8 +567,10 @@ function renderEditor(){
         </div>`).join('')}
     `)}
 
-    ${sec('sliders', 'جزئیات نمایش', 'المان‌های کوچک‌تر کارت را روشن یا خاموش کنید.', `
-      <div class="toggles">${Object.entries(SHOW_INFO).map(([k, n]) => `<label class="tg"><span>${n}</span>${sw(`show.${k}`, DATA.show[k])}</label>`).join('')}</div>
+    ${sec('sliders', 'نمایش المان‌ها', 'هر المان کارت را جداگانه روشن یا خاموش کنید. با خاموش کردن، اطلاعات پاک نمی‌شود.', `
+      ${SHOW_GROUPS.map(([g, items]) => `
+        <div class="tg-h">${g}</div>
+        <div class="toggles">${Object.entries(items).map(([k, n]) => `<label class="tg"><span>${n}</span>${sw(`show.${k}`, DATA.show[k])}</label>`).join('')}</div>`).join('')}
     `)}
 
     ${sec('user', 'اطلاعات اصلی', '', `
@@ -586,7 +603,7 @@ function renderEditor(){
           ${bi('عنوان دکمه (اختیاری)', `contacts.${i}.label`, { ph:m.n })}
         </div>`; }).join('')}
       <button type="button" class="btn add" data-op="add" data-l="contacts">${ic('plus')}افزودن دکمه</button>
-    `)}
+    `, layoutP('actions'))}
 
     ${sec('pin', 'آدرس و موقعیت', '', `
       ${bi('آدرس', 'address', { area:true })}
@@ -595,7 +612,7 @@ function renderEditor(){
         ${fld('طول جغرافیایی (lng)', 'location.lng', { num:true, ph:'51.4100' })}
       </div>
       <label><small>در گوگل‌مپ روی محل دفتر کلیک راست کنید؛ عدد اول lat و عدد دوم lng است.</small></label>
-    `)}
+    `, 'show.address')}
 
     ${sec('clock', 'ساعات کاری', 'به وقت تهران. روزهای تعطیل را غیرفعال کنید.', `
       <div style="margin-top:8px">${WEEK.map(d => {
@@ -604,9 +621,9 @@ function renderEditor(){
           <label class="d" style="margin:0;color:var(--text)"><input type="checkbox" ${r ? 'checked' : ''}>${DAYS[d]}</label>
           <input type="time" value="${a}" dir="ltr"><input type="time" value="${b}" dir="ltr">
         </div>`; }).join('')}</div>
-    `)}
+    `, 'show.hours')}
 
-    ${sec('user', 'درباره من', '', bi('متن معرفی', 'about', { area:true }))}
+    ${sec('user', 'درباره من', '', bi('متن معرفی', 'about', { area:true }), layoutP('about'))}
 
     ${sec('chart', 'آمار', 'مثلاً سال‌های سابقه یا تعداد پرونده‌ها. حداکثر ۳ مورد پیشنهاد می‌شود.', `
       ${DATA.stats.map((s, i) => `
@@ -615,7 +632,7 @@ function renderEditor(){
           ${bi('عنوان', `stats.${i}.label`)}
         </div>`).join('')}
       <button type="button" class="btn add" data-op="add" data-l="stats">${ic('plus')}افزودن آمار</button>
-    `)}
+    `, layoutP('stats'))}
 
     ${sec('scale', 'حوزه‌های تخصصی', '', `
       ${DATA.areas.map((a, i) => `
@@ -627,7 +644,7 @@ function renderEditor(){
           ${bi('عنوان', `areas.${i}`)}
         </div>`).join('')}
       <button type="button" class="btn add" data-op="add" data-l="areas">${ic('plus')}افزودن حوزه</button>
-    `)}
+    `, layoutP('areas'))}
 
     ${sec('briefcase', 'سوابق حرفه‌ای و تحصیلات', 'به ترتیب نمایش؛ مورد اول برجسته نشان داده می‌شود.', `
       ${DATA.experience.map((x, i) => `
@@ -638,7 +655,7 @@ function renderEditor(){
           ${bi('توضیح', `experience.${i}.desc`, { area:true })}
         </div>`).join('')}
       <button type="button" class="btn add" data-op="add" data-l="experience">${ic('plus')}افزودن سابقه</button>
-    `)}
+    `, layoutP('experience'))}
   </main>`;
   window.scrollTo(0, y);
   bindEditor();
@@ -661,7 +678,7 @@ function bindEditor(){
       else if (el.dataset.num){ v = v === '' ? '' : parseFloat(v); if (Number.isNaN(v)) return; }
       if (getP(DATA, p) === v) return;
       setP(DATA, p, v); markDirty();
-      if (el.dataset.bool) el.closest('.lay')?.classList.toggle('off', !v);
+      if (el.dataset.bool) return renderEditor();
       if (el.dataset.rerender) return renderEditor();
       if (el.tagName === 'SELECT') el.closest('.icon-row').querySelector('.icon-pv').innerHTML = ic(v);
       return;

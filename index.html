@@ -102,6 +102,7 @@ bdi{unicode-bidi:isolate}
   background:var(--gold);color:#1a1408;display:grid;place-items:center;border:3px solid var(--card2);
 }
 .verified svg{width:14px;height:14px;stroke-width:3}
+.hero-in.no-photo .banner{height:64px;margin-bottom:-6px}
 .name{font-size:26px;font-weight:800;letter-spacing:-.2px;line-height:1.35}
 html[lang="en"] .name{font-family:"Cormorant Garamond",Georgia,"Times New Roman",serif;font-size:30px;font-weight:700;letter-spacing:.2px}
 .title{
@@ -389,7 +390,7 @@ function normalize(d){
   if (!Array.isArray(d.layout)) d.layout = SECTIONS.map(id => ({ id, show:true }));
   d.layout = d.layout.filter(x => SECTIONS.includes(x.id));
   SECTIONS.forEach(id => { if (!d.layout.some(x => x.id === id)) d.layout.push({ id, show:false }); });
-  d.show = Object.assign({ tagline:true, status:true, verified:true, map:true, mapLinks:true, hours:true }, d.show || {});
+  d.show = Object.assign({ shareTop:true, langToggle:true, photo:true, verified:true, title:true, tagline:true, status:true, address:true, map:true, mapLinks:true, hours:true, shareBtn:true, footer:true }, d.show || {});
   ['stats','areas','experience'].forEach(k => { if (!Array.isArray(d[k])) d[k] = []; });
   d.hours = d.hours || {};
   d.location = d.location || { lat:35.6892, lng:51.3890 };
@@ -487,9 +488,9 @@ function render(){
     },
 
     save: () => `
-      <div class="cta-row rise" ${d()}>
+      <div class="cta-row rise" ${d()} ${S.shareBtn ? '' : 'style="grid-template-columns:1fr"'}>
         <button class="cta" id="save">${ic('userPlus')}${t('save')}</button>
-        <button class="ghost" id="share" aria-label="${t('share')}">${ic('share')}</button>
+        ${S.shareBtn ? `<button class="ghost" id="share" aria-label="${t('share')}">${ic('share')}</button>` : ''}
       </div>`,
 
     stats: () => !C.stats.length ? '' : `
@@ -525,7 +526,7 @@ function render(){
 
     office: () => {
       const parts = [
-        L(C.address) && `<div class="addr">${ic('pin')}<span>${esc(L(C.address))}</span></div>`,
+        S.address && L(C.address) && `<div class="addr">${ic('pin')}<span>${esc(L(C.address))}</span></div>`,
         S.map && `<div class="map"><iframe loading="lazy" title="map" referrerpolicy="no-referrer"
             src="https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${lat},${lng}"></iframe></div>`,
         S.mapLinks && `<div class="maps">
@@ -568,20 +569,21 @@ function render(){
   };
 
   document.getElementById('app').innerHTML = `
+    ${S.shareTop || S.langToggle ? `
     <div class="topbar rise" ${d()}>
-      <button class="chip-btn" id="share-top" aria-label="${t('share')}">${ic('share')}${t('share')}</button>
-      <button class="chip-btn" id="lang" aria-label="Language">${ic('globe')}${t('lang')}</button>
-    </div>
+      ${S.shareTop ? `<button class="chip-btn" id="share-top" aria-label="${t('share')}">${ic('share')}${t('share')}</button>` : '<span></span>'}
+      ${S.langToggle ? `<button class="chip-btn" id="lang" aria-label="Language">${ic('globe')}${t('lang')}</button>` : ''}
+    </div>` : ''}
 
     <section class="hero rise" ${d()}>
-      <div class="hero-in">
+      <div class="hero-in ${S.photo ? '' : 'no-photo'}">
         <div class="banner">${ic('scale','watermark')}</div>
-        <div class="avatar">
+        ${S.photo ? `<div class="avatar">
           <div class="avatar-in">${C.photo ? `<img src="${esc(C.photo)}" alt="${esc(fullName())}">` : `<span>${esc(L(C.firstName).charAt(0))}</span>`}</div>
           ${S.verified ? `<div class="verified">${ic('check')}</div>` : ''}
-        </div>
+        </div>` : ''}
         <h1 class="name">${esc(fullName())}</h1>
-        ${L(C.title) ? `<div class="title">${esc(L(C.title))}</div>` : ''}
+        ${S.title && L(C.title) ? `<div class="title">${esc(L(C.title))}</div>` : ''}
         ${S.tagline && L(C.tagline) ? `<p class="tagline">${esc(L(C.tagline))}</p>` : ''}
         ${S.status && hasHours ? `<div class="status ${st.open ? 'open' : ''}"><span class="dot"></span><span>${st.text}</span></div>` : ''}
       </div>
@@ -589,10 +591,10 @@ function render(){
 
     ${C.layout.filter(x => x.show && BLOCKS[x.id]).map(x => BLOCKS[x.id]()).join('')}
 
-    <footer>
+    ${S.footer ? `<footer>
       <div class="sig">${ic('scale')}<span>${esc(fullName())}</span></div>
       <div>${t('rights')} · ${new Intl.DateTimeFormat(lang === 'fa' ? 'fa-IR-u-ca-persian' : 'en-US', { year:'numeric' }).format(new Date())}</div>
-    </footer>
+    </footer>` : '<div style="height:24px"></div>'}
   `;
   bind();
   countUp();

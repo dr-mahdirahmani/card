@@ -239,11 +239,18 @@ window.CARD_DATA = {
     }
   ],
   "show": {
+    "shareTop": true,
+    "langToggle": true,
+    "photo": true,
+    "verified": true,
+    "title": true,
     "tagline": true,
     "status": true,
-    "verified": true,
+    "address": true,
     "map": true,
     "mapLinks": true,
-    "hours": true
+    "hours": true,
+    "shareBtn": true,
+    "footer": true
   }
 };
