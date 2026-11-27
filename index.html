@@ -272,7 +272,7 @@ let CONFIG = null;
 /* ============================ UI TEXT ============================ */
 const T = {
   fa: {
-    call:'تماس', whatsapp:'واتساپ', telegram:'تلگرام', instagram:'اینستاگرام', email:'ایمیل', route:'مسیریابی', linkedin:'لینکدین',
+    call:'تماس', whatsapp:'واتساپ', telegram:'تلگرام', instagram:'اینستاگرام', email:'ایمیل', route:'مسیریابی', linkedin:'لینکدین', website:'وب‌سایت', eitaa:'ایتا', bale:'بله', rubika:'روبیکا', officeOnly:'آدرس دفتر',
     save:'ذخیره در مخاطبین', share:'اشتراک', about:'درباره من', areas:'حوزه‌های تخصصی', exp:'سوابق حرفه‌ای',
     office:'دفتر و ساعات کاری', consult:'درخواست مشاوره', namePh:'نام و نام خانوادگی', msgPh:'موضوع یا شرح مختصر پرونده…',
     sendWa:'واتساپ', sendTg:'تلگرام', sendMail:'ایمیل',
@@ -284,7 +284,7 @@ const T = {
     google:'گوگل‌مپ', neshan:'نشان', balad:'بلد', today:'امروز', tomorrow:'فردا', rights:'کارت ویزیت دیجیتال'
   },
   en: {
-    call:'Call', whatsapp:'WhatsApp', telegram:'Telegram', instagram:'Instagram', email:'Email', route:'Directions', linkedin:'LinkedIn',
+    call:'Call', whatsapp:'WhatsApp', telegram:'Telegram', instagram:'Instagram', email:'Email', route:'Directions', linkedin:'LinkedIn', website:'Website', eitaa:'Eitaa', bale:'Bale', rubika:'Rubika', officeOnly:'Office',
     save:'Save Contact', share:'Share', about:'About', areas:'Practice Areas', exp:'Experience',
     office:'Office & Hours', consult:'Request a Consultation', namePh:'Full name', msgPh:'Briefly describe your matter…',
     sendWa:'WhatsApp', sendTg:'Telegram', sendMail:'Email',
@@ -375,23 +375,64 @@ function officeStatus(){
   return { open:false, text:`<b>${t('closed')}</b>` };
 }
 
+/* ============================ DATA MODEL ============================ */
+const SECTIONS = ['actions','save','stats','about','areas','experience','office','consult'];
+const LEGACY = ['phone','whatsapp','telegram','instagram','email','linkedin'];
+/* داده‌های قدیمی را به ساختار جدید (لیست مخاطب + چیدمان) تبدیل می‌کند */
+function normalize(d){
+  d = d || {};
+  if (!Array.isArray(d.contacts)){
+    d.contacts = LEGACY.filter(k => d[k]).map(k => ({ type:k, value:String(d[k]), label:{ fa:'', en:'' } }));
+    d.contacts.push({ type:'route', value:'', label:{ fa:'', en:'' } });
+  }
+  LEGACY.forEach(k => delete d[k]);
+  if (!Array.isArray(d.layout)) d.layout = SECTIONS.map(id => ({ id, show:true }));
+  d.layout = d.layout.filter(x => SECTIONS.includes(x.id));
+  SECTIONS.forEach(id => { if (!d.layout.some(x => x.id === id)) d.layout.push({ id, show:false }); });
+  d.show = Object.assign({ tagline:true, status:true, verified:true, map:true, mapLinks:true, hours:true }, d.show || {});
+  ['stats','areas','experience'].forEach(k => { if (!Array.isArray(d[k])) d[k] = []; });
+  d.hours = d.hours || {};
+  d.location = d.location || { lat:35.6892, lng:51.3890 };
+  return d;
+}
+
+const handle = v => String(v).trim().replace(/^@/, '');
+const CT = {
+  phone:    { icon:'phone',     k:'call',      href:v => `tel:${v.replace(/[^\d+]/g, '')}` },
+  whatsapp: { icon:'whatsapp',  k:'whatsapp',  href:v => `https://wa.me/${v.replace(/\D/g, '')}` },
+  telegram: { icon:'telegram',  k:'telegram',  href:v => `https://t.me/${handle(v)}` },
+  instagram:{ icon:'instagram', k:'instagram', href:v => `https://instagram.com/${handle(v)}` },
+  email:    { icon:'mail',      k:'email',     href:v => `mailto:${v.trim()}` },
+  linkedin: { icon:'linkedin',  k:'linkedin',  href:v => /^https?:/i.test(v) ? v : `https://linkedin.com/in/${handle(v)}` },
+  website:  { icon:'globe',     k:'website',   href:v => /^https?:/i.test(v) ? v : `https://${v.trim()}` },
+  eitaa:    { icon:'chat',      k:'eitaa',     href:v => `https://eitaa.com/${handle(v)}` },
+  bale:     { icon:'chat',      k:'bale',      href:v => `https://ble.ir/${handle(v)}` },
+  rubika:   { icon:'chat',      k:'rubika',    href:v => `https://rubika.ir/${handle(v)}` },
+  route:    { icon:'pin',       k:'route',     href:() => '' },
+};
+const firstOf = type => (CONFIG.contacts.find(c => c.type === type && String(c.value || '').trim()) || {}).value;
+const allOf = type => CONFIG.contacts.filter(c => c.type === type && String(c.value || '').trim()).map(c => String(c.value).trim());
+const isShown = id => CONFIG.layout.some(x => x.id === id && x.show);
+const mapsUrl = () => `https://www.google.com/maps/search/?api=1&query=${CONFIG.location.lat},${CONFIG.location.lng}`;
+
 /* ---- vCard ---- */
 function saveContact(){
-  const v = s => String(s || '').replace(/\\/g,'\\\\').replace(/\n/g,'\\n').replace(/,/g,'\\,').replace(/;/g,'\\;');
+  const v = s => String(s || '').replace(/\\/g,'\\\\').replace(/\n/g,'\\n').replace(/,/g,'\\,').replace(/;/g,'\;');
+  const social = ['instagram','telegram','linkedin','eitaa','bale','rubika'].flatMap(tp =>
+    allOf(tp).map(val => `X-SOCIALPROFILE;TYPE=${tp}:${CT[tp].href(val)}`));
   const lines = [
     'BEGIN:VCARD','VERSION:3.0',
     `N:${v(L(CONFIG.lastName))};${v(L(CONFIG.firstName))};;;`,
     `FN:${v(fullName())}`,
-    CONFIG.org && `ORG:${v(L(CONFIG.org))}`,
-    `TITLE:${v(L(CONFIG.title))}`,
-    CONFIG.phone && `TEL;TYPE=CELL,VOICE:${CONFIG.phone}`,
-    CONFIG.email && `EMAIL;TYPE=INTERNET,WORK:${CONFIG.email}`,
-    `ADR;TYPE=WORK:;;${v(L(CONFIG.address))};;;;`,
+    L(CONFIG.org) && `ORG:${v(L(CONFIG.org))}`,
+    L(CONFIG.title) && `TITLE:${v(L(CONFIG.title))}`,
+    ...allOf('phone').map(p => `TEL;TYPE=CELL,VOICE:${p.replace(/[^\d+]/g, '')}`),
+    ...allOf('email').map(e => `EMAIL;TYPE=INTERNET,WORK:${e}`),
+    L(CONFIG.address) && `ADR;TYPE=WORK:;;${v(L(CONFIG.address))};;;;`,
     `URL:${pageUrl()}`,
-    CONFIG.instagram && `X-SOCIALPROFILE;TYPE=instagram:https://instagram.com/${CONFIG.instagram}`,
-    CONFIG.telegram && `X-SOCIALPROFILE;TYPE=telegram:https://t.me/${CONFIG.telegram}`,
-    CONFIG.linkedin && `X-SOCIALPROFILE;TYPE=linkedin:${CONFIG.linkedin}`,
-    `NOTE:${v(L(CONFIG.tagline))}`,
+    ...allOf('website').map(w => `URL:${CT.website.href(w)}`),
+    ...social,
+    L(CONFIG.tagline) && `NOTE:${v(L(CONFIG.tagline))}`,
     'END:VCARD'
   ].filter(Boolean).join('\r\n');
   const blob = new Blob([lines], { type:'text/vcard;charset=utf-8' });
@@ -423,23 +464,108 @@ function render(){
   document.documentElement.dir  = lang === 'fa' ? 'rtl' : 'ltr';
   document.title = `${fullName()} | ${L(CONFIG.title)}`;
 
-  const C = CONFIG, { lat, lng } = C.location || { lat:35.6892, lng:51.3890 };
+  const C = CONFIG, S = C.show, { lat, lng } = C.location;
+  const hasHours = Object.keys(C.hours).length > 0;
   const st = officeStatus();
   const today = tehranNow().day;
   let delay = 0; const d = () => `style="animation-delay:${(delay += 60)}ms"`;
-
-  const actions = [
-    C.phone     && { k:'call',      icon:'phone',     href:`tel:${C.phone}` },
-    C.whatsapp  && { k:'whatsapp',  icon:'whatsapp',  href:`https://wa.me/${C.whatsapp}` },
-    C.telegram  && { k:'telegram',  icon:'telegram',  href:`https://t.me/${C.telegram}` },
-    C.instagram && { k:'instagram', icon:'instagram', href:`https://instagram.com/${C.instagram}` },
-    C.email     && { k:'email',     icon:'mail',      href:`mailto:${C.email}` },
-    C.linkedin  && { k:'linkedin',  icon:'linkedin',  href:C.linkedin },
-    { k:'route', icon:'pin', href:'#office', internal:true },
-  ].filter(Boolean).slice(0, 6);
-
   const weekOrder = [6,0,1,2,3,4,5];
   const bbox = [lng-.006, lat-.0035, lng+.006, lat+.0035].join(',');
+
+  /* هر بخش یک تابع؛ ترتیب و نمایش از CONFIG.layout خوانده می‌شود */
+  const BLOCKS = {
+    actions: () => {
+      const items = C.contacts.filter(c => CT[c.type] && (c.type === 'route' || String(c.value || '').trim()));
+      if (!items.length) return '';
+      return `<nav class="actions">${items.map(c => {
+        const def = CT[c.type];
+        const route = c.type === 'route', internal = route && isShown('office');
+        const href = route ? (internal ? '#office' : mapsUrl()) : def.href(String(c.value));
+        return `<a class="act rise" ${d()} href="${esc(href)}" ${internal || c.type === 'phone' || c.type === 'email' ? '' : 'target="_blank" rel="noopener"'}>
+          <span class="ic">${ic(def.icon)}</span>${esc(L(c.label) || t(def.k))}</a>`;
+      }).join('')}</nav>`;
+    },
+
+    save: () => `
+      <div class="cta-row rise" ${d()}>
+        <button class="cta" id="save">${ic('userPlus')}${t('save')}</button>
+        <button class="ghost" id="share" aria-label="${t('share')}">${ic('share')}</button>
+      </div>`,
+
+    stats: () => !C.stats.length ? '' : `
+      <div class="stats" style="grid-template-columns:repeat(${Math.min(C.stats.length, 3)},1fr)">
+        ${C.stats.map(s => `<div class="stat rise" ${d()}><b data-count="${+s.value || 0}" data-suffix="${esc(s.suffix || '')}">${num(s.value)}${esc(s.suffix || '')}</b><span>${esc(L(s.label))}</span></div>`).join('')}
+      </div>`,
+
+    about: () => !L(C.about) ? '' : `
+      <section class="sec rise" ${d()}>
+        <h2 class="sec-h">${ic('user')}${t('about')}</h2>
+        <p class="about">${esc(L(C.about))}</p>
+      </section>`,
+
+    areas: () => !C.areas.length ? '' : `
+      <section class="sec rise" ${d()}>
+        <h2 class="sec-h">${ic('scale')}${t('areas')}</h2>
+        <div class="areas">${C.areas.map(a => `<div class="area">${ic(a.icon)}<span>${esc(L(a))}</span></div>`).join('')}</div>
+      </section>`,
+
+    experience: () => !C.experience.length ? '' : `
+      <section class="sec rise" ${d()}>
+        <h2 class="sec-h">${ic('briefcase')}${t('exp')}</h2>
+        <div class="tl">
+          ${C.experience.map(e => `
+            <div class="tl-item">
+              ${L(e.period) ? `<div class="tl-period">${esc(L(e.period))}</div>` : ''}
+              <div class="tl-role">${esc(L(e.role))}</div>
+              ${L(e.org)  ? `<div class="tl-org">${esc(L(e.org))}</div>` : ''}
+              ${L(e.desc) ? `<div class="tl-desc">${esc(L(e.desc))}</div>` : ''}
+            </div>`).join('')}
+        </div>
+      </section>`,
+
+    office: () => {
+      const parts = [
+        L(C.address) && `<div class="addr">${ic('pin')}<span>${esc(L(C.address))}</span></div>`,
+        S.map && `<div class="map"><iframe loading="lazy" title="map" referrerpolicy="no-referrer"
+            src="https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${lat},${lng}"></iframe></div>`,
+        S.mapLinks && `<div class="maps">
+            <a href="${mapsUrl()}" target="_blank" rel="noopener">${ic('nav')}${t('google')}</a>
+            <a href="https://neshan.org/maps/@${lat},${lng},16z,0p" target="_blank" rel="noopener">${ic('nav')}${t('neshan')}</a>
+            <a href="https://balad.ir/location?latitude=${lat}&longitude=${lng}&zoom=16" target="_blank" rel="noopener">${ic('nav')}${t('balad')}</a>
+          </div>`,
+        S.hours && hasHours && `<div class="hours">
+            ${weekOrder.map(i => { const r = range(i); return `
+              <div class="hr ${i === today ? 'today' : ''}">
+                <span>${t('days')[i]}</span>
+                ${r ? `<span><bdi dir="ltr">${num(r.a)} – ${num(r.b)}</bdi></span>` : `<span class="closed">${t('closedDay')}</span>`}
+              </div>`; }).join('')}
+          </div>`
+      ].filter(Boolean);
+      if (!parts.length) return '';
+      return `<section class="sec rise" id="office" ${d()}>
+        <h2 class="sec-h">${ic(S.hours && hasHours ? 'clock' : 'pin')}${S.hours && hasHours ? t('office') : t('officeOnly')}</h2>
+        ${parts.join('')}
+      </section>`;
+    },
+
+    consult: () => {
+      const wa = firstOf('whatsapp'), tg = firstOf('telegram'), em = firstOf('email');
+      if (!wa && !tg && !em) return '';
+      return `<section class="sec rise" ${d()}>
+        <h2 class="sec-h">${ic('chat')}${t('consult')}</h2>
+        <div class="form">
+          <input class="field" id="f-name" type="text" autocomplete="name" placeholder="${t('namePh')}">
+          <textarea class="field" id="f-msg" rows="4" placeholder="${t('msgPh')}"></textarea>
+          <div class="send-row" style="grid-template-columns:repeat(${[wa, tg, em].filter(Boolean).length},1fr)">
+            ${wa ? `<button class="send" data-send="wa">${ic('whatsapp')}${t('sendWa')}</button>` : ''}
+            ${tg ? `<button class="send" data-send="tg">${ic('telegram')}${t('sendTg')}</button>` : ''}
+            ${em ? `<button class="send" data-send="mail">${ic('mail')}${t('sendMail')}</button>` : ''}
+          </div>
+          <p class="hint">${t('hint')}</p>
+        </div>
+      </section>`;
+    },
+  };
 
   document.getElementById('app').innerHTML = `
     <div class="topbar rise" ${d()}>
@@ -452,92 +578,16 @@ function render(){
         <div class="banner">${ic('scale','watermark')}</div>
         <div class="avatar">
           <div class="avatar-in">${C.photo ? `<img src="${esc(C.photo)}" alt="${esc(fullName())}">` : `<span>${esc(L(C.firstName).charAt(0))}</span>`}</div>
-          <div class="verified">${ic('check')}</div>
+          ${S.verified ? `<div class="verified">${ic('check')}</div>` : ''}
         </div>
         <h1 class="name">${esc(fullName())}</h1>
-        <div class="title">${esc(L(C.title))}</div>
-        <p class="tagline">${esc(L(C.tagline))}</p>
-        <div class="status ${st.open ? 'open' : ''}"><span class="dot"></span><span>${st.text}</span></div>
+        ${L(C.title) ? `<div class="title">${esc(L(C.title))}</div>` : ''}
+        ${S.tagline && L(C.tagline) ? `<p class="tagline">${esc(L(C.tagline))}</p>` : ''}
+        ${S.status && hasHours ? `<div class="status ${st.open ? 'open' : ''}"><span class="dot"></span><span>${st.text}</span></div>` : ''}
       </div>
     </section>
 
-    <nav class="actions">
-      ${actions.map(a => `
-        <a class="act rise" ${d()} href="${a.href}" ${a.internal ? '' : 'target="_blank" rel="noopener"'}>
-          <span class="ic">${ic(a.icon)}</span>${t(a.k)}
-        </a>`).join('')}
-    </nav>
-
-    <div class="cta-row rise" ${d()}>
-      <button class="cta" id="save">${ic('userPlus')}${t('save')}</button>
-      <button class="ghost" id="share" aria-label="${t('share')}">${ic('share')}</button>
-    </div>
-
-    ${C.stats?.length ? `
-    <div class="stats">
-      ${C.stats.map(s => `<div class="stat rise" ${d()}><b data-count="${s.value}" data-suffix="${s.suffix||''}">${num(s.value)}${s.suffix||''}</b><span>${esc(L(s.label))}</span></div>`).join('')}
-    </div>` : ''}
-
-    ${L(C.about) ? `
-    <section class="sec rise" ${d()}>
-      <h2 class="sec-h">${ic('user')}${t('about')}</h2>
-      <p class="about">${esc(L(C.about))}</p>
-    </section>` : ''}
-
-    ${C.areas?.length ? `
-    <section class="sec rise" ${d()}>
-      <h2 class="sec-h">${ic('scale')}${t('areas')}</h2>
-      <div class="areas">${C.areas.map(a => `<div class="area">${ic(a.icon)}<span>${esc(L(a))}</span></div>`).join('')}</div>
-    </section>` : ''}
-
-    ${C.experience?.length ? `
-    <section class="sec rise" ${d()}>
-      <h2 class="sec-h">${ic('briefcase')}${t('exp')}</h2>
-      <div class="tl">
-        ${C.experience.map(e => `
-          <div class="tl-item">
-            <div class="tl-period">${esc(L(e.period))}</div>
-            <div class="tl-role">${esc(L(e.role))}</div>
-            ${L(e.org)  ? `<div class="tl-org">${esc(L(e.org))}</div>` : ''}
-            ${L(e.desc) ? `<div class="tl-desc">${esc(L(e.desc))}</div>` : ''}
-          </div>`).join('')}
-      </div>
-    </section>` : ''}
-
-    <section class="sec rise" id="office" ${d()}>
-      <h2 class="sec-h">${ic('clock')}${t('office')}</h2>
-      <div class="addr">${ic('pin')}<span>${esc(L(C.address))}</span></div>
-      <div class="map">
-        <iframe loading="lazy" title="map" referrerpolicy="no-referrer"
-          src="https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${lat},${lng}"></iframe>
-      </div>
-      <div class="maps">
-        <a href="https://www.google.com/maps/search/?api=1&query=${lat},${lng}" target="_blank" rel="noopener">${ic('nav')}${t('google')}</a>
-        <a href="https://neshan.org/maps/@${lat},${lng},16z,0p" target="_blank" rel="noopener">${ic('nav')}${t('neshan')}</a>
-        <a href="https://balad.ir/location?latitude=${lat}&longitude=${lng}&zoom=16" target="_blank" rel="noopener">${ic('nav')}${t('balad')}</a>
-      </div>
-      <div class="hours">
-        ${weekOrder.map(i => { const r = range(i); return `
-          <div class="hr ${i === today ? 'today' : ''}">
-            <span>${t('days')[i]}</span>
-            ${r ? `<span><bdi dir="ltr">${num(r.a)} – ${num(r.b)}</bdi></span>` : `<span class="closed">${t('closedDay')}</span>`}
-          </div>`; }).join('')}
-      </div>
-    </section>
-
-    <section class="sec rise" ${d()}>
-      <h2 class="sec-h">${ic('chat')}${t('consult')}</h2>
-      <div class="form">
-        <input class="field" id="f-name" type="text" autocomplete="name" placeholder="${t('namePh')}">
-        <textarea class="field" id="f-msg" rows="4" placeholder="${t('msgPh')}"></textarea>
-        <div class="send-row">
-          ${C.whatsapp ? `<button class="send" data-send="wa">${ic('whatsapp')}${t('sendWa')}</button>` : ''}
-          ${C.telegram ? `<button class="send" data-send="tg">${ic('telegram')}${t('sendTg')}</button>` : ''}
-          ${C.email    ? `<button class="send" data-send="mail">${ic('mail')}${t('sendMail')}</button>` : ''}
-        </div>
-        <p class="hint">${t('hint')}</p>
-      </div>
-    </section>
+    ${C.layout.filter(x => x.show && BLOCKS[x.id]).map(x => BLOCKS[x.id]()).join('')}
 
     <footer>
       <div class="sig">${ic('scale')}<span>${esc(fullName())}</span></div>
@@ -549,21 +599,22 @@ function render(){
 }
 
 function bind(){
-  document.getElementById('lang').onclick = () => {
+  const on = (id, fn) => { const el = document.getElementById(id); if (el) el.onclick = fn; };
+  on('lang', () => {
     lang = lang === 'fa' ? 'en' : 'fa';
     try { localStorage.setItem('vc-lang', lang); } catch(e){}
     render(); window.scrollTo({ top:0 });
-  };
-  document.getElementById('save').onclick = saveContact;
-  document.getElementById('share').onclick = share;
-  document.getElementById('share-top').onclick = share;
+  });
+  on('save', saveContact);
+  on('share', share);
+  on('share-top', share);
 
   document.querySelectorAll('[data-send]').forEach(b => b.onclick = async () => {
     const m = buildMessage(); if (!m) return;
     const via = b.dataset.send;
-    if (via === 'wa')   window.open(`https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(m)}`, '_blank');
-    if (via === 'mail') location.href = `mailto:${CONFIG.email}?subject=${encodeURIComponent(t('consult'))}&body=${encodeURIComponent(m)}`;
-    if (via === 'tg')  { await copy(m); toast(t('tgCopied')); setTimeout(() => window.open(`https://t.me/${CONFIG.telegram}`, '_blank'), 700); }
+    if (via === 'wa')   window.open(`https://wa.me/${firstOf('whatsapp').replace(/\D/g, '')}?text=${encodeURIComponent(m)}`, '_blank');
+    if (via === 'mail') location.href = `mailto:${firstOf('email').trim()}?subject=${encodeURIComponent(t('consult'))}&body=${encodeURIComponent(m)}`;
+    if (via === 'tg')  { await copy(m); toast(t('tgCopied')); setTimeout(() => window.open(CT.telegram.href(firstOf('telegram')), '_blank'), 700); }
   });
 }
 
@@ -595,8 +646,7 @@ loadData().then(data => {
     document.getElementById('app').innerHTML = '<p class="loading">اطلاعات کارت بارگذاری نشد.</p>';
     return;
   }
-  CONFIG = data;
-  CONFIG.hours = CONFIG.hours || {};
+  CONFIG = normalize(data);
   render();
   setInterval(() => {               // refresh the open/closed badge every minute
     const s = document.querySelector('.status'); if (!s) return;

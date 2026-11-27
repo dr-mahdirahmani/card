@@ -17,6 +17,7 @@
   --font:"Vazirmatn", Tahoma, system-ui, sans-serif;
 }
 *{box-sizing:border-box;margin:0;padding:0}
+[hidden]{display:none!important}
 body{
   font-family:var(--font);color:var(--text);min-height:100vh;line-height:1.7;-webkit-font-smoothing:antialiased;
   background:radial-gradient(900px 520px at 50% -200px, rgba(201,165,92,.13), transparent 70%), var(--bg);
@@ -108,6 +109,25 @@ input[type=checkbox]{width:18px;height:18px;margin:0;accent-color:var(--gold);di
 .icon-row{display:grid;grid-template-columns:46px 1fr;gap:10px;align-items:end}
 .icon-pv{height:44px;border-radius:12px;display:grid;place-items:center;color:var(--gold2);background:rgba(201,165,92,.08);border:1px solid var(--line)}
 
+/* layout rows & switches */
+.lay{display:flex;align-items:center;gap:10px;padding:9px 10px;margin-top:8px;border-radius:14px;background:rgba(255,255,255,.02);border:1px solid var(--line2);transition:opacity .2s}
+.lay.off{opacity:.5}
+.lay .lay-ic{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;color:var(--gold2);background:rgba(201,165,92,.08);border:1px solid var(--line)}
+.lay .lay-ic svg{width:17px;height:17px}
+.lay .lay-n{flex:1;font-size:13.5px}
+.sw{position:relative;display:inline-block;width:40px;height:23px;margin:0;flex:none;cursor:pointer}
+.sw input{position:absolute;opacity:0;width:0;height:0}
+.sw span{position:absolute;inset:0;border-radius:999px;background:rgba(255,255,255,.12);transition:.2s}
+.sw span::after{content:"";position:absolute;top:3px;inset-inline-start:3px;width:17px;height:17px;border-radius:50%;background:#cfd6df;transition:.2s}
+.sw input:checked+span{background:var(--gold)}
+.sw input:checked+span::after{background:#1a140a;transform:translateX(17px)}
+html[dir=rtl] .sw input:checked+span::after{transform:translateX(-17px)}
+.toggles{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+@media (max-width:520px){ .toggles{grid-template-columns:1fr} }
+.tg{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0;padding:10px 12px;border-radius:12px;border:1px solid var(--line2);background:rgba(255,255,255,.02);font-size:13px;color:var(--text);cursor:pointer}
+.ct-h{display:inline-flex;align-items:center;gap:7px}
+.ct-h svg{width:16px;height:16px}
+
 .day{display:grid;grid-template-columns:120px 1fr 1fr;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line2)}
 .day:last-child{border-bottom:0}
 .day .d{display:flex;align-items:center;gap:9px;font-size:13.5px;cursor:pointer}
@@ -174,7 +194,13 @@ const I = {
   eye:'<path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/>',
   more:'<circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/>',
   up:'<path d="m18 15-6-6-6 6"/>', down:'<path d="m6 9 6 6 6-6"/>', x:'<path d="M18 6 6 18M6 6l12 12"/>',
-  plus:'<path d="M12 5v14M5 12h14"/>', save:'<path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><path d="M17 21v-8H7v8M7 3v5h8"/>',
+  plus:'<path d="M12 5v14M5 12h14"/>',
+  layout:'<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/>',
+  sliders:'<path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/>',
+  whatsapp:'<path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/><path d="M9 10a.5.5 0 0 0 1 0V9a.5.5 0 0 0-1 0v1a5 5 0 0 0 5 5h1a.5.5 0 0 0 0-1h-1a.5.5 0 0 0 0 1"/>',
+  telegram:'<path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/>',
+  instagram:'<rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><path d="M17.5 6.5h.01"/>',
+  linkedin:'<path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/>', save:'<path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><path d="M17 21v-8H7v8M7 3v5h8"/>',
   image:'<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.09-3.09a2 2 0 0 0-2.82 0L6 21"/>',
   pen:'<path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/>',
   drop:'<path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/>',
@@ -189,6 +215,51 @@ const I = {
 const ic = n => `<svg viewBox="0 0 24 24" aria-hidden="true">${I[n] || ''}</svg>`;
 const AREA_ICONS = { pen:'قلم / قرارداد', drop:'نفت و انرژی', ship:'کشتی و حمل', gavel:'دعاوی', building:'شرکت', home:'ملک',
   scale:'ترازو', briefcase:'کیف کار', globe:'بین‌الملل', user:'شخص', chat:'گفتگو', mail:'نامه' };
+const SECTIONS = ['actions','save','stats','about','areas','experience','office','consult'];
+const LEGACY = ['phone','whatsapp','telegram','instagram','email','linkedin'];
+function normalize(d){
+  d = d || {};
+  if (!Array.isArray(d.contacts)){
+    d.contacts = LEGACY.filter(k => d[k]).map(k => ({ type:k, value:String(d[k]), label:{ fa:'', en:'' } }));
+    d.contacts.push({ type:'route', value:'', label:{ fa:'', en:'' } });
+  }
+  LEGACY.forEach(k => delete d[k]);
+  if (!Array.isArray(d.layout)) d.layout = SECTIONS.map(id => ({ id, show:true }));
+  d.layout = d.layout.filter(x => SECTIONS.includes(x.id));
+  SECTIONS.forEach(id => { if (!d.layout.some(x => x.id === id)) d.layout.push({ id, show:false }); });
+  d.show = Object.assign({ tagline:true, status:true, verified:true, map:true, mapLinks:true, hours:true }, d.show || {});
+  ['stats','areas','experience'].forEach(k => { if (!Array.isArray(d[k])) d[k] = []; });
+  d.hours = d.hours || {};
+  d.location = d.location || { lat:35.6892, lng:51.3890 };
+  return d;
+}
+const SECTION_INFO = {
+  actions:   ['دکمه‌های ارتباطی', 'phone'],
+  save:      ['دکمه ذخیره مخاطب و اشتراک', 'user'],
+  stats:     ['آمار', 'chart'],
+  about:     ['درباره من', 'user'],
+  areas:     ['حوزه‌های تخصصی', 'scale'],
+  experience:['سوابق حرفه‌ای', 'briefcase'],
+  office:    ['دفتر، نقشه و ساعات کاری', 'pin'],
+  consult:   ['فرم درخواست مشاوره', 'chat'],
+};
+const SHOW_INFO = {
+  tagline:'شعار زیر نام', status:'وضعیت «در دسترس / تعطیل»', verified:'نشان تیک طلایی روی عکس',
+  map:'نقشه‌ی داخل صفحه', mapLinks:'دکمه‌های گوگل‌مپ / نشان / بلد', hours:'جدول ساعات کاری',
+};
+const CONTACT_TYPES = {
+  phone:    { n:'تلفن / موبایل', icon:'phone',     ph:'+989120000000', hint:'با کد کشور' },
+  whatsapp: { n:'واتساپ',        icon:'whatsapp',  ph:'989120000000',  hint:'بدون + و بدون صفر اول' },
+  telegram: { n:'تلگرام',        icon:'telegram',  ph:'username',      hint:'آیدی بدون @' },
+  instagram:{ n:'اینستاگرام',    icon:'instagram', ph:'username',      hint:'آیدی بدون @' },
+  email:    { n:'ایمیل',         icon:'mail',      ph:'name@example.com' },
+  linkedin: { n:'لینکدین',       icon:'linkedin',  ph:'https://linkedin.com/in/...' },
+  website:  { n:'وب‌سایت',       icon:'globe',     ph:'example.com' },
+  eitaa:    { n:'ایتا',          icon:'chat',      ph:'username' },
+  bale:     { n:'بله',           icon:'chat',      ph:'username' },
+  rubika:   { n:'روبیکا',        icon:'chat',      ph:'username' },
+  route:    { n:'مسیریابی',      icon:'pin' },
+};
 const DAYS = ['یکشنبه','دوشنبه','سه‌شنبه','چهارشنبه','پنجشنبه','جمعه','شنبه'];
 const WEEK = [6,0,1,2,3,4,5];
 
@@ -417,8 +488,7 @@ async function openEditor(){
     } catch(e){ toast(ghError(e), true); }
   }
   if (!DATA){ await loadScript('data.js'); DATA = structuredClone(window.CARD_DATA || {}); }
-  ['stats','areas','experience'].forEach(k => { if (!Array.isArray(DATA[k])) DATA[k] = []; });
-  DATA.hours = DATA.hours || {}; DATA.location = DATA.location || { lat:35.6892, lng:51.3890 };
+  DATA = normalize(DATA);
   pendingPhoto = null; markDirty(false);
   renderEditor();
 }
@@ -437,10 +507,11 @@ function bi(label, p, { area=false, ph='' } = {}){
 function fld(label, p, { type='text', dir='ltr', ph='', num=false, hint='' } = {}){
   return `<label>${label}<input type="${type}" dir="${dir}" placeholder="${esc(ph)}" data-p="${p}" ${num ? 'data-num="1" step="any" inputmode="decimal"' : ''} value="${esc(getP(DATA, p))}">${hint ? `<small>${hint}</small>` : ''}</label>`;
 }
-const ops = (list, i, len) => `<div class="ops">
+const ops = (list, i, len, canDel = true) => `<div class="ops">
   <button type="button" data-op="up" data-l="${list}" data-i="${i}" ${i === 0 ? 'disabled' : ''} title="بالا">${ic('up')}</button>
   <button type="button" data-op="down" data-l="${list}" data-i="${i}" ${i === len - 1 ? 'disabled' : ''} title="پایین">${ic('down')}</button>
-  <button type="button" class="del" data-op="del" data-l="${list}" data-i="${i}" title="حذف">${ic('x')}</button></div>`;
+  ${canDel ? `<button type="button" class="del" data-op="del" data-l="${list}" data-i="${i}" title="حذف">${ic('x')}</button>` : ''}</div>`;
+const sw = (p, on) => `<label class="sw"><input type="checkbox" data-p="${p}" data-bool="1" ${on ? 'checked' : ''}><span></span></label>`;
 const sec = (icon, title, desc, body) => `<section class="sec"><h2>${ic(icon)}${title}</h2>${desc ? `<p>${desc}</p>` : ''}${body}</section>`;
 
 function photoPreview(){
@@ -471,6 +542,20 @@ function renderEditor(){
       ? `متصل به مخزن <bdi>${esc(REPO.owner)}/${esc(REPO.name)}</bdi> — تغییرات حدود یک دقیقه بعد از ذخیره روی سایت دیده می‌شود.`
       : 'بدون اتصال به گیت‌هاب — بعد از ویرایش، فایل data.js را دانلود و در مخزن جایگزین کنید.'}</div>
 
+    ${sec('layout', 'چیدمان صفحه', 'ترتیب بخش‌ها را با فلش‌ها عوض کنید و با کلید، هر بخش را نمایش دهید یا از صفحه بردارید. اطلاعات بخش خاموش پاک نمی‌شود.', `
+      ${DATA.layout.map((x, i) => `
+        <div class="lay ${x.show ? '' : 'off'}">
+          ${sw(`layout.${i}.show`, x.show)}
+          <span class="lay-ic">${ic(SECTION_INFO[x.id][1])}</span>
+          <span class="lay-n">${SECTION_INFO[x.id][0]}</span>
+          ${ops('layout', i, DATA.layout.length, false)}
+        </div>`).join('')}
+    `)}
+
+    ${sec('sliders', 'جزئیات نمایش', 'المان‌های کوچک‌تر کارت را روشن یا خاموش کنید.', `
+      <div class="toggles">${Object.entries(SHOW_INFO).map(([k, n]) => `<label class="tg"><span>${n}</span>${sw(`show.${k}`, DATA.show[k])}</label>`).join('')}</div>
+    `)}
+
     ${sec('user', 'اطلاعات اصلی', '', `
       <div class="photo">
         <div class="pv"><div id="pv">${photoPreview()}</div></div>
@@ -489,15 +574,18 @@ function renderEditor(){
       ${bi('نام دفتر / سازمان', 'org')}
     `)}
 
-    ${sec('phone', 'راه‌های ارتباطی', 'هر فیلدی را خالی بگذارید، دکمه‌اش از کارت حذف می‌شود.', `
-      <div class="grid2">
-        ${fld('شماره تماس', 'phone', { type:'tel', ph:'+989120000000', hint:'با کد کشور و بدون فاصله' })}
-        ${fld('واتساپ', 'whatsapp', { ph:'989120000000', hint:'بدون + و بدون صفر اول' })}
-        ${fld('آیدی تلگرام', 'telegram', { ph:'username', hint:'بدون @' })}
-        ${fld('آیدی اینستاگرام', 'instagram', { ph:'username', hint:'بدون @' })}
-        ${fld('ایمیل', 'email', { type:'email', ph:'name@example.com' })}
-        ${fld('لینکدین', 'linkedin', { type:'url', ph:'https://linkedin.com/in/...' })}
-      </div>
+    ${sec('phone', 'دکمه‌های ارتباطی', 'هر دکمه را می‌توانید حذف کنید، جابه‌جا کنید یا دکمه‌ی جدید اضافه کنید. از هر نوع می‌شود چند دکمه داشت (مثلاً تلفن دفتر و موبایل).', `
+      ${DATA.contacts.map((c, i) => { const m = CONTACT_TYPES[c.type] || CONTACT_TYPES.phone; return `
+        <div class="item"><div class="item-h"><span class="ct-h">${ic(m.icon)}${m.n}</span>${ops('contacts', i, DATA.contacts.length)}</div>
+          <div class="grid2">
+            <label>نوع<select data-p="contacts.${i}.type" data-rerender="1">${Object.entries(CONTACT_TYPES).map(([k, v]) => `<option value="${k}" ${c.type === k ? 'selected' : ''}>${v.n}</option>`).join('')}</select></label>
+            ${c.type === 'route'
+              ? `<label>مقدار<input disabled value="خودکار: بخش دفتر یا گوگل‌مپ"></label>`
+              : fld('مقدار', `contacts.${i}.value`, { ph:m.ph || '', hint:m.hint || '' })}
+          </div>
+          ${bi('عنوان دکمه (اختیاری)', `contacts.${i}.label`, { ph:m.n })}
+        </div>`; }).join('')}
+      <button type="button" class="btn add" data-op="add" data-l="contacts">${ic('plus')}افزودن دکمه</button>
     `)}
 
     ${sec('pin', 'آدرس و موقعیت', '', `
@@ -557,6 +645,7 @@ function renderEditor(){
 }
 
 const TEMPLATES = {
+  contacts:   () => ({ type:'phone', value:'', label:{ fa:'', en:'' } }),
   stats:      () => ({ value:0, suffix:'+', label:{ fa:'', en:'' } }),
   areas:      () => ({ icon:'scale', fa:'', en:'' }),
   experience: () => ({ period:{ fa:'', en:'' }, role:{ fa:'', en:'' }, org:{ fa:'', en:'' }, desc:{ fa:'', en:'' } }),
@@ -568,8 +657,12 @@ function bindEditor(){
     const el = e.target, p = el.dataset.p;
     if (p){
       let v = el.value;
-      if (el.dataset.num){ v = v === '' ? '' : parseFloat(v); if (Number.isNaN(v)) return; }
+      if (el.dataset.bool) v = el.checked;
+      else if (el.dataset.num){ v = v === '' ? '' : parseFloat(v); if (Number.isNaN(v)) return; }
+      if (getP(DATA, p) === v) return;
       setP(DATA, p, v); markDirty();
+      if (el.dataset.bool) el.closest('.lay')?.classList.toggle('off', !v);
+      if (el.dataset.rerender) return renderEditor();
       if (el.tagName === 'SELECT') el.closest('.icon-row').querySelector('.icon-pv').innerHTML = ic(v);
       return;
     }

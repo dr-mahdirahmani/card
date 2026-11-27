@@ -1,10 +1,10 @@
 window.CARD_DATA = {
   "firstName": {
-    "fa": "مهدی ",
+    "fa": "امیرصادق",
     "en": "Amirsadeq"
   },
   "lastName": {
-    "fa": "رحمانی",
+    "fa": "نام‌خانوادگی",
     "en": "Lastname"
   },
   "title": {
@@ -20,12 +20,6 @@ window.CARD_DATA = {
     "en": "... Law Office"
   },
   "photo": "",
-  "phone": "+989120000000",
-  "whatsapp": "989120000000",
-  "telegram": "username",
-  "instagram": "username",
-  "email": "name@example.com",
-  "linkedin": "",
   "address": {
     "fa": "تهران، خیابان ...، پلاک ...، طبقه ...، واحد ...",
     "en": "Unit ..., No. ..., ... St., Tehran, Iran"
@@ -34,7 +28,14 @@ window.CARD_DATA = {
     "lat": 35.7575,
     "lng": 51.41
   },
-  "hours": {},
+  "hours": {
+    "0": "09:00-17:00",
+    "1": "09:00-17:00",
+    "2": "09:00-17:00",
+    "3": "09:00-17:00",
+    "4": "09:00-13:00",
+    "6": "09:00-17:00"
+  },
   "about": {
     "fa": "وکیل پایه یک دادگستری با تمرکز بر حقوق تجارت و قراردادها. سال‌ها تجربه در تنظیم، مذاکره و مدیریت قراردادهای داخلی و بین‌المللی — به‌ویژه در تجارت نفت و فرآورده‌های نفتی — و طرح و دفاع از دعاوی تجاری در محاکم دادگستری و مراجع داوری.",
     "en": "Attorney at law focused on commercial and contract law, with extensive experience drafting, negotiating and managing domestic and international agreements — particularly in crude oil and petroleum products trade — and representing clients in commercial litigation and arbitration."
@@ -152,5 +153,97 @@ window.CARD_DATA = {
         "en": ""
       }
     }
-  ]
+  ],
+  "contacts": [
+    {
+      "type": "phone",
+      "value": "+989120000000",
+      "label": {
+        "fa": "",
+        "en": ""
+      }
+    },
+    {
+      "type": "whatsapp",
+      "value": "989120000000",
+      "label": {
+        "fa": "",
+        "en": ""
+      }
+    },
+    {
+      "type": "telegram",
+      "value": "username",
+      "label": {
+        "fa": "",
+        "en": ""
+      }
+    },
+    {
+      "type": "instagram",
+      "value": "username",
+      "label": {
+        "fa": "",
+        "en": ""
+      }
+    },
+    {
+      "type": "email",
+      "value": "name@example.com",
+      "label": {
+        "fa": "",
+        "en": ""
+      }
+    },
+    {
+      "type": "route",
+      "value": "",
+      "label": {
+        "fa": "",
+        "en": ""
+      }
+    }
+  ],
+  "layout": [
+    {
+      "id": "actions",
+      "show": true
+    },
+    {
+      "id": "save",
+      "show": true
+    },
+    {
+      "id": "stats",
+      "show": true
+    },
+    {
+      "id": "about",
+      "show": true
+    },
+    {
+      "id": "areas",
+      "show": true
+    },
+    {
+      "id": "experience",
+      "show": true
+    },
+    {
+      "id": "office",
+      "show": true
+    },
+    {
+      "id": "consult",
+      "show": true
+    }
+  ],
+  "show": {
+    "tagline": true,
+    "status": true,
+    "verified": true,
+    "map": true,
+    "mapLinks": true,
+    "hours": true
+  }
 };
