@@ -34,14 +34,7 @@ window.CARD_DATA = {
     "lat": 35.7575,
     "lng": 51.41
   },
-  "hours": {
-    "0": "09:00-17:00",
-    "1": "09:00-17:00",
-    "2": "09:00-17:00",
-    "3": "09:00-17:00",
-    "4": "09:00-13:00",
-    "6": "09:00-17:00"
-  },
+  "hours": {},
   "about": {
     "fa": "وکیل پایه یک دادگستری با تمرکز بر حقوق تجارت و قراردادها. سال‌ها تجربه در تنظیم، مذاکره و مدیریت قراردادهای داخلی و بین‌المللی — به‌ویژه در تجارت نفت و فرآورده‌های نفتی — و طرح و دفاع از دعاوی تجاری در محاکم دادگستری و مراجع داوری.",
     "en": "Attorney at law focused on commercial and contract law, with extensive experience drafting, negotiating and managing domestic and international agreements — particularly in crude oil and petroleum products trade — and representing clients in commercial litigation and arbitration."
