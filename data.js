@@ -1,11 +1,11 @@
 window.CARD_DATA = {
   "firstName": {
-    "fa": "امیرصادق",
-    "en": "Amirsadeq"
+    "fa": "مهدی",
+    "en": "Mahdi"
   },
   "lastName": {
-    "fa": "نام‌خانوادگی",
-    "en": "Lastname"
+    "fa": "رحمانی",
+    "en": "Rahmani"
   },
   "title": {
     "fa": "وکیل پایه یک دادگستری",
@@ -239,17 +239,17 @@ window.CARD_DATA = {
     }
   ],
   "show": {
-    "tagline": true,
-    "status": false,
-    "verified": true,
-    "map": true,
-    "mapLinks": true,
-    "hours": true,
     "shareTop": true,
     "langToggle": true,
     "photo": true,
+    "verified": true,
     "title": true,
+    "tagline": true,
+    "status": false,
     "address": true,
+    "map": true,
+    "mapLinks": true,
+    "hours": true,
     "shareBtn": true,
     "footer": true
   }
