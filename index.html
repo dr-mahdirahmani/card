@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b1118">
+<title>کارت ویزیت دیجیتال</title>
+<meta name="description" content="کارت ویزیت دیجیتال — راه‌های ارتباطی، سوابق حرفه‌ای و آدرس دفتر">
+<meta property="og:title" content="کارت ویزیت دیجیتال">
+<meta property="og:description" content="راه‌های ارتباطی، سوابق حرفه‌ای و آدرس دفتر">
+<meta property="og:type" content="profile">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b1118'/%3E%3Cpath d='M32 14v36M20 50h24M14 22h36M14 22l-6 14c2 2 4 3 6 3s4-1 6-3zM50 22l-6 14c2 2 4 3 6 3s4-1 6-3z' stroke='%23c9a55c' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css">
+
+<style>
+:root{
+  --bg:#0b1118;
+  --bg2:#0f1721;
+  --card:#121b26;
+  --card2:#162131;
+  --line:rgba(201,165,92,.16);
+  --line2:rgba(255,255,255,.06);
+  --gold:#c9a55c;
+  --gold2:#ead39b;
+  --text:#eef1f5;
+  --muted:#8e9aab;
+  --ok:#4fc38a;
+  --off:#e0795f;
+  --r:22px;
+  --font:"Vazirmatn", Tahoma, system-ui, sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{
+  font-family:var(--font);
+  background:
+    radial-gradient(900px 520px at 50% -180px, rgba(201,165,92,.16), transparent 70%),
+    radial-gradient(600px 400px at 110% 40%, rgba(64,110,170,.10), transparent 70%),
+    var(--bg);
+  background-attachment:fixed;
+  color:var(--text);
+  min-height:100vh;
+  line-height:1.8;
+  -webkit-font-smoothing:antialiased;
+  padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom);
+}
+html[lang="en"] body{line-height:1.6}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+svg{width:22px;height:22px;flex:none;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+bdi{unicode-bidi:isolate}
+
+.wrap{max-width:460px;margin:0 auto;padding:16px 16px 40px}
+
+/* ---------- top bar ---------- */
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.chip-btn{
+  display:inline-flex;align-items:center;gap:8px;
+  height:40px;padding:0 14px;border-radius:999px;
+  background:rgba(255,255,255,.04);border:1px solid var(--line2);
+  font-size:13px;color:var(--muted);transition:.2s;
+}
+.chip-btn:hover{color:var(--gold2);border-color:var(--line)}
+.chip-btn svg{width:18px;height:18px}
+
+/* ---------- hero ---------- */
+.hero{
+  position:relative;border-radius:calc(var(--r) + 6px);padding:1px;
+  background:linear-gradient(140deg, rgba(234,211,155,.55), rgba(201,165,92,.08) 35%, rgba(201,165,92,.04) 65%, rgba(234,211,155,.35));
+  box-shadow:0 30px 60px -30px rgba(0,0,0,.8), 0 0 0 1px rgba(0,0,0,.3);
+}
+.hero-in{
+  position:relative;overflow:hidden;border-radius:calc(var(--r) + 5px);
+  background:linear-gradient(180deg,var(--card2),var(--card));
+  padding:0 22px 24px;text-align:center;
+}
+.banner{
+  height:112px;margin:0 -22px;position:relative;
+  background:
+    repeating-linear-gradient(45deg, rgba(201,165,92,.07) 0 1px, transparent 1px 14px),
+    repeating-linear-gradient(-45deg, rgba(201,165,92,.07) 0 1px, transparent 1px 14px),
+    linear-gradient(180deg, #1a2638, #141e2c);
+  -webkit-mask:linear-gradient(#000 55%, transparent);
+          mask:linear-gradient(#000 55%, transparent);
+}
+.watermark{position:absolute;inset-inline-end:-30px;top:-20px;width:190px;height:190px;color:var(--gold);opacity:.07;stroke-width:.9}
+.avatar{
+  width:104px;height:104px;margin:-62px auto 14px;position:relative;border-radius:50%;
+  padding:3px;background:conic-gradient(from 200deg, var(--gold2), var(--gold), #7d6232, var(--gold), var(--gold2));
+  box-shadow:0 12px 30px -10px rgba(201,165,92,.45);
+}
+.avatar-in{
+  width:100%;height:100%;border-radius:50%;overflow:hidden;
+  background:radial-gradient(circle at 30% 25%, #22324a, #0f1721);
+  display:grid;place-items:center;border:3px solid var(--card2);
+}
+.avatar-in img{width:100%;height:100%;object-fit:cover}
+.avatar-in span{font-size:40px;font-weight:800;color:var(--gold2);line-height:1}
+.verified{
+  position:absolute;bottom:4px;inset-inline-end:2px;width:28px;height:28px;border-radius:50%;
+  background:var(--gold);color:#1a1408;display:grid;place-items:center;border:3px solid var(--card2);
+}
+.verified svg{width:14px;height:14px;stroke-width:3}
+.name{font-size:26px;font-weight:800;letter-spacing:-.2px;line-height:1.35}
+html[lang="en"] .name{font-family:"Cormorant Garamond",Georgia,"Times New Roman",serif;font-size:30px;font-weight:700;letter-spacing:.2px}
+.title{
+  display:inline-flex;align-items:center;gap:8px;margin-top:6px;
+  font-size:14px;font-weight:600;color:var(--gold2);
+}
+.title::before,.title::after{content:"";width:18px;height:1px;background:linear-gradient(90deg,transparent,var(--gold))}
+.title::after{transform:scaleX(-1)}
+.tagline{margin:10px auto 0;max-width:330px;font-size:13.5px;color:var(--muted)}
+.status{
+  display:inline-flex;align-items:center;gap:8px;margin-top:16px;padding:6px 12px;border-radius:999px;
+  font-size:12.5px;background:rgba(255,255,255,.035);border:1px solid var(--line2);color:var(--muted)
+}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--off);box-shadow:0 0 0 4px rgba(224,121,95,.14)}
+.status.open .dot{background:var(--ok);box-shadow:0 0 0 4px rgba(79,195,138,.15);animation:pulse 2s infinite}
+.status b{color:var(--text);font-weight:600}
+@keyframes pulse{50%{box-shadow:0 0 0 7px rgba(79,195,138,0)}}
+
+/* ---------- actions ---------- */
+.actions{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px}
+.act{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;
+  padding:16px 6px 13px;border-radius:18px;
+  background:var(--card);border:1px solid var(--line2);
+  font-size:12.5px;color:var(--muted);transition:transform .15s, border-color .2s, color .2s, background .2s;
+}
+.act .ic{
+  width:46px;height:46px;border-radius:14px;display:grid;place-items:center;color:var(--gold2);
+  background:linear-gradient(160deg, rgba(201,165,92,.16), rgba(201,165,92,.04));
+  border:1px solid var(--line);
+}
+.act:hover{border-color:var(--line);color:var(--text);background:var(--card2)}
+.act:active{transform:scale(.96)}
+
+.cta-row{display:grid;grid-template-columns:1fr auto;gap:10px;margin-top:10px}
+.cta{
+  display:flex;align-items:center;justify-content:center;gap:10px;height:56px;border-radius:18px;
+  background:linear-gradient(135deg, var(--gold2), var(--gold) 55%, #a8843f);
+  color:#18130a;font-weight:700;font-size:15px;
+  box-shadow:0 14px 30px -14px rgba(201,165,92,.7), inset 0 1px 0 rgba(255,255,255,.4);
+  transition:transform .15s, filter .2s; position:relative; overflow:hidden;
+}
+.cta::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(110deg, transparent 30%, rgba(255,255,255,.45) 50%, transparent 70%);
+  transform:translateX(-120%);animation:shine 4.5s 1.5s infinite;
+}
+@keyframes shine{0%{transform:translateX(-120%)}25%,100%{transform:translateX(120%)}}
+.cta:hover{filter:brightness(1.06)}
+.cta:active{transform:scale(.98)}
+.cta svg{stroke-width:2}
+.ghost{
+  width:56px;height:56px;border-radius:18px;display:grid;place-items:center;color:var(--gold2);
+  background:var(--card);border:1px solid var(--line);transition:.2s
+}
+.ghost:hover{background:var(--card2)}
+
+/* ---------- sections ---------- */
+.sec{margin-top:16px;padding:20px;border-radius:var(--r);background:var(--card);border:1px solid var(--line2)}
+.sec-h{display:flex;align-items:center;gap:10px;margin-bottom:14px;font-size:15px;font-weight:700}
+.sec-h svg{color:var(--gold);width:20px;height:20px}
+.sec-h::after{content:"";flex:1;height:1px;background:linear-gradient(to left, transparent, var(--line));margin-inline-start:6px}
+html[dir="ltr"] .sec-h::after{background:linear-gradient(to right, var(--line), transparent)}
+.about{font-size:14px;color:#c3cad5;text-align:justify}
+
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px}
+.stat{padding:16px 8px;border-radius:18px;text-align:center;background:var(--card);border:1px solid var(--line2)}
+.stat b{display:block;font-size:24px;font-weight:800;color:var(--gold2);line-height:1.2}
+.stat span{font-size:11.5px;color:var(--muted)}
+
+.areas{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.area{
+  display:flex;align-items:center;gap:10px;padding:11px 12px;border-radius:14px;
+  background:rgba(255,255,255,.025);border:1px solid var(--line2);font-size:13px;line-height:1.5
+}
+.area svg{width:18px;height:18px;color:var(--gold)}
+
+.tl{position:relative;padding-inline-start:22px}
+.tl::before{content:"";position:absolute;inset-inline-start:5px;top:8px;bottom:8px;width:1px;background:linear-gradient(var(--gold),rgba(201,165,92,.08))}
+.tl-item{position:relative;padding-bottom:18px}
+.tl-item:last-child{padding-bottom:0}
+.tl-item::before{
+  content:"";position:absolute;inset-inline-start:-22px;top:7px;width:11px;height:11px;border-radius:50%;
+  background:var(--card);border:2px solid var(--gold);
+}
+.tl-item:first-child::before{background:var(--gold);box-shadow:0 0 0 4px rgba(201,165,92,.15)}
+.tl-period{font-size:12px;color:var(--gold);font-weight:600}
+.tl-role{font-size:14.5px;font-weight:700;margin-top:2px}
+.tl-org{font-size:13px;color:var(--muted)}
+.tl-desc{font-size:13px;color:#b8c0cc;margin-top:4px}
+
+/* office */
+.addr{display:flex;gap:10px;align-items:flex-start;font-size:14px;color:#c3cad5}
+.addr svg{color:var(--gold);margin-top:3px;width:19px;height:19px}
+.map{
+  margin-top:14px;height:170px;border-radius:16px;overflow:hidden;border:1px solid var(--line2);position:relative;background:#1a2433
+}
+.map iframe{width:100%;height:100%;border:0;filter:invert(.9) hue-rotate(180deg) saturate(.6) brightness(.95) contrast(.9)}
+.map::after{content:"";position:absolute;inset:0;pointer-events:none;box-shadow:inset 0 0 40px rgba(11,17,24,.7)}
+.maps{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.maps a{
+  display:flex;align-items:center;justify-content:center;gap:6px;height:42px;border-radius:12px;
+  background:rgba(255,255,255,.03);border:1px solid var(--line2);font-size:12.5px;color:var(--muted);transition:.2s
+}
+.maps a:hover{color:var(--gold2);border-color:var(--line)}
+.maps svg{width:16px;height:16px}
+.hours{margin-top:16px;display:grid;gap:2px}
+.hr{display:flex;justify-content:space-between;padding:8px 12px;border-radius:10px;font-size:13px;color:var(--muted)}
+.hr.today{background:rgba(201,165,92,.09);color:var(--text);font-weight:600}
+.hr.today span:first-child::after{content:" •";color:var(--gold)}
+.hr .closed{color:#6e7888}
+
+/* form */
+.form{display:grid;gap:10px}
+.field{
+  width:100%;padding:13px 14px;border-radius:14px;font:inherit;font-size:14px;color:var(--text);
+  background:rgba(255,255,255,.03);border:1px solid var(--line2);outline:none;transition:.2s;resize:vertical
+}
+.field::placeholder{color:#677386}
+.field:focus{border-color:var(--gold);background:rgba(201,165,92,.04)}
+.send-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.send{
+  display:flex;align-items:center;justify-content:center;gap:7px;height:46px;border-radius:14px;font-size:13px;font-weight:600;
+  background:rgba(201,165,92,.1);border:1px solid var(--line);color:var(--gold2);transition:.2s
+}
+.send:hover{background:rgba(201,165,92,.18)}
+.send svg{width:17px;height:17px}
+.hint{font-size:11.5px;color:#6e7888;text-align:center}
+
+footer{margin-top:26px;text-align:center;font-size:12px;color:#5f6b7c}
+footer .sig{display:inline-flex;align-items:center;gap:8px;color:var(--gold);opacity:.8;margin-bottom:6px}
+footer .sig svg{width:16px;height:16px}
+
+/* loading */
+.loading{min-height:70vh;display:grid;place-items:center;color:var(--muted);font-size:14px}
+.spin{width:34px;height:34px;border-radius:50%;border:2px solid var(--line);border-top-color:var(--gold);animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* toast */
+.toast{
+  position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom));transform:translate(-50%,20px);
+  padding:11px 18px;border-radius:999px;background:#f2e6c6;color:#1a140a;font-size:13px;font-weight:600;
+  box-shadow:0 10px 30px rgba(0,0,0,.4);opacity:0;pointer-events:none;transition:.3s;z-index:50;white-space:nowrap
+}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+/* entrance */
+.rise{opacity:0;transform:translateY(14px);animation:rise .6s cubic-bezier(.2,.7,.2,1) forwards}
+@keyframes rise{to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){
+  .rise{animation:none;opacity:1;transform:none}
+  .cta::after,.status.open .dot{animation:none}
+}
+@media (max-width:360px){
+  .areas{grid-template-columns:1fr}
+  .name{font-size:23px}
+}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"><div class="loading"><span class="spin"></span></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* اطلاعات کارت از فایل data.js خوانده می‌شود و از طریق admin.html قابل ویرایش است. */
+let CONFIG = null;
+
+/* ============================ UI TEXT ============================ */
+const T = {
+  fa: {
+    call:'تماس', whatsapp:'واتساپ', telegram:'تلگرام', instagram:'اینستاگرام', email:'ایمیل', route:'مسیریابی', linkedin:'لینکدین',
+    save:'ذخیره در مخاطبین', share:'اشتراک', about:'درباره من', areas:'حوزه‌های تخصصی', exp:'سوابق حرفه‌ای',
+    office:'دفتر و ساعات کاری', consult:'درخواست مشاوره', namePh:'نام و نام خانوادگی', msgPh:'موضوع یا شرح مختصر پرونده…',
+    sendWa:'واتساپ', sendTg:'تلگرام', sendMail:'ایمیل',
+    hint:'پیام شما مستقیماً در برنامه‌ی انتخابی باز می‌شود؛ اطلاعاتی در این صفحه ذخیره نمی‌شود.',
+    open:'در دسترس', closed:'خارج از ساعت کاری', until:'تا ساعت', opens:'شروع کار', closedDay:'تعطیل',
+    copied:'لینک کپی شد', tgCopied:'متن پیام کپی شد؛ در تلگرام بچسبانید', saved:'کارت مخاطب آماده شد',
+    needMsg:'لطفاً متن پیام را بنویسید', greet:'سلام، وقت بخیر.', from:'از طرف', lang:'EN',
+    days:['یکشنبه','دوشنبه','سه‌شنبه','چهارشنبه','پنجشنبه','جمعه','شنبه'],
+    google:'گوگل‌مپ', neshan:'نشان', balad:'بلد', today:'امروز', tomorrow:'فردا', rights:'کارت ویزیت دیجیتال'
+  },
+  en: {
+    call:'Call', whatsapp:'WhatsApp', telegram:'Telegram', instagram:'Instagram', email:'Email', route:'Directions', linkedin:'LinkedIn',
+    save:'Save Contact', share:'Share', about:'About', areas:'Practice Areas', exp:'Experience',
+    office:'Office & Hours', consult:'Request a Consultation', namePh:'Full name', msgPh:'Briefly describe your matter…',
+    sendWa:'WhatsApp', sendTg:'Telegram', sendMail:'Email',
+    hint:'Your message opens directly in the app you choose; nothing is stored on this page.',
+    open:'Available now', closed:'Currently closed', until:'until', opens:'Opens', closedDay:'Closed',
+    copied:'Link copied', tgCopied:'Message copied — paste it in Telegram', saved:'Contact card ready',
+    needMsg:'Please write a message', greet:'Hello,', from:'From', lang:'فا',
+    days:['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],
+    google:'Google', neshan:'Neshan', balad:'Balad', today:'today', tomorrow:'tomorrow', rights:'Digital Business Card'
+  }
+};
+
+/* ============================ ICONS ============================ */
+const I = {
+  phone:'<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>',
+  whatsapp:'<path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/><path d="M9 10a.5.5 0 0 0 1 0V9a.5.5 0 0 0-1 0v1a5 5 0 0 0 5 5h1a.5.5 0 0 0 0-1h-1a.5.5 0 0 0 0 1"/>',
+  telegram:'<path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/>',
+  instagram:'<rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><path d="M17.5 6.5h.01"/>',
+  mail:'<rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>',
+  pin:'<path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>',
+  nav:'<polygon points="3 11 22 2 13 21 11 13 3 11"/>',
+  share:'<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.59 13.51 6.83 3.98M15.41 6.51l-6.82 3.98"/>',
+  userPlus:'<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6M22 11h-6"/>',
+  clock:'<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>',
+  scale:'<path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10M12 3v18M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/>',
+  briefcase:'<rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>',
+  user:'<circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1"/>',
+  globe:'<circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20M2 12h20"/>',
+  chat:'<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
+  check:'<path d="M20 6 9 17l-5-5"/>',
+  pen:'<path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/>',
+  drop:'<path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/>',
+  ship:'<path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.76"/><path d="M19 13V7a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v6M12 10v4M12 2v3"/>',
+  gavel:'<path d="m14.5 12.5-8 8a2.12 2.12 0 1 1-3-3l8-8"/><path d="m16 16 6-6M8 8l6-6M9 7l8 8M21 11l-8-8"/>',
+  building:'<path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2M10 6h4M10 10h4M10 14h4M10 18h4"/>',
+  home:'<path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/>',
+  linkedin:'<path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/>'
+};
+const ic = (n, cls='') => `<svg viewBox="0 0 24 24" class="${cls}" aria-hidden="true">${I[n]||''}</svg>`;
+
+/* ============================ HELPERS ============================ */
+let lang = (() => {
+  const q = new URLSearchParams(location.search).get('lang');
+  if (q === 'en' || q === 'fa') return q;
+  try { return localStorage.getItem('vc-lang') || 'fa'; } catch(e) { return 'fa'; }
+})();
+const t = k => T[lang][k];
+const L = o => (o && typeof o === 'object') ? (o[lang] ?? '') : (o ?? '');
+const num = s => lang === 'fa' ? String(s).replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]) : String(s);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fullName = () => `${L(CONFIG.firstName)} ${L(CONFIG.lastName)}`.trim();
+const pageUrl = () => location.href.split('#')[0].split('?')[0];
+
+function toast(msg){
+  const el = document.getElementById('toast');
+  el.textContent = msg; el.classList.add('show');
+  clearTimeout(toast._t); toast._t = setTimeout(() => el.classList.remove('show'), 2400);
+}
+async function copy(text){
+  try { await navigator.clipboard.writeText(text); return true; }
+  catch(e){
+    const ta = document.createElement('textarea'); ta.value = text; ta.style.position='fixed'; ta.style.opacity='0';
+    document.body.appendChild(ta); ta.select();
+    let ok = false; try { ok = document.execCommand('copy'); } catch(_){}
+    ta.remove(); return ok;
+  }
+}
+
+/* ---- Tehran time & office status ---- */
+function tehranNow(){
+  const parts = new Intl.DateTimeFormat('en-US', { timeZone:'Asia/Tehran', weekday:'short', hour:'2-digit', minute:'2-digit', hourCycle:'h23' }).formatToParts(new Date());
+  const g = k => parts.find(p => p.type === k)?.value;
+  const day = {Sun:0,Mon:1,Tue:2,Wed:3,Thu:4,Fri:5,Sat:6}[g('weekday')];
+  return { day, mins: (+g('hour') % 24) * 60 + (+g('minute')) };
+}
+const toMin = s => { const [h,m] = s.split(':').map(Number); return h*60 + m; };
+const range = d => { const r = CONFIG.hours[d]; if(!r) return null; const [a,b] = r.split('-'); return {a, b, s:toMin(a), e:toMin(b)}; };
+
+function officeStatus(){
+  const { day, mins } = tehranNow();
+  const r = range(day);
+  if (r && mins >= r.s && mins < r.e) return { open:true, text:`<b>${t('open')}</b> · ${t('until')} ${num(r.b)}` };
+  if (r && mins < r.s) return { open:false, text:`<b>${t('closed')}</b> · ${t('opens')} ${t('today')} ${num(r.a)}` };
+  for (let i = 1; i <= 7; i++){
+    const d = (day + i) % 7, n = range(d);
+    if (n) return { open:false, text:`<b>${t('closed')}</b> · ${t('opens')} ${i===1 ? t('tomorrow') : t('days')[d]} ${num(n.a)}` };
+  }
+  return { open:false, text:`<b>${t('closed')}</b>` };
+}
+
+/* ---- vCard ---- */
+function saveContact(){
+  const v = s => String(s || '').replace(/\\/g,'\\\\').replace(/\n/g,'\\n').replace(/,/g,'\\,').replace(/;/g,'\\;');
+  const lines = [
+    'BEGIN:VCARD','VERSION:3.0',
+    `N:${v(L(CONFIG.lastName))};${v(L(CONFIG.firstName))};;;`,
+    `FN:${v(fullName())}`,
+    CONFIG.org && `ORG:${v(L(CONFIG.org))}`,
+    `TITLE:${v(L(CONFIG.title))}`,
+    CONFIG.phone && `TEL;TYPE=CELL,VOICE:${CONFIG.phone}`,
+    CONFIG.email && `EMAIL;TYPE=INTERNET,WORK:${CONFIG.email}`,
+    `ADR;TYPE=WORK:;;${v(L(CONFIG.address))};;;;`,
+    `URL:${pageUrl()}`,
+    CONFIG.instagram && `X-SOCIALPROFILE;TYPE=instagram:https://instagram.com/${CONFIG.instagram}`,
+    CONFIG.telegram && `X-SOCIALPROFILE;TYPE=telegram:https://t.me/${CONFIG.telegram}`,
+    CONFIG.linkedin && `X-SOCIALPROFILE;TYPE=linkedin:${CONFIG.linkedin}`,
+    `NOTE:${v(L(CONFIG.tagline))}`,
+    'END:VCARD'
+  ].filter(Boolean).join('\r\n');
+  const blob = new Blob([lines], { type:'text/vcard;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `${((CONFIG.firstName?.en || 'contact') + '-' + (CONFIG.lastName?.en || '')).replace(/\s+/g,'-')}.vcf`;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+  toast(t('saved'));
+}
+
+async function share(){
+  const data = { title: fullName(), text: `${fullName()} — ${L(CONFIG.title)}`, url: pageUrl() };
+  if (navigator.share) { try { await navigator.share(data); return; } catch(e){ if (e.name === 'AbortError') return; } }
+  if (await copy(pageUrl())) toast(t('copied'));
+}
+
+/* ---- consultation message ---- */
+function buildMessage(){
+  const name = document.getElementById('f-name').value.trim();
+  const msg  = document.getElementById('f-msg').value.trim();
+  if (!msg){ toast(t('needMsg')); document.getElementById('f-msg').focus(); return null; }
+  return `${t('greet')}\n${msg}${name ? `\n\n${t('from')}: ${name}` : ''}`;
+}
+
+/* ============================ RENDER ============================ */
+function render(){
+  document.documentElement.lang = lang;
+  document.documentElement.dir  = lang === 'fa' ? 'rtl' : 'ltr';
+  document.title = `${fullName()} | ${L(CONFIG.title)}`;
+
+  const C = CONFIG, { lat, lng } = C.location || { lat:35.6892, lng:51.3890 };
+  const st = officeStatus();
+  const today = tehranNow().day;
+  let delay = 0; const d = () => `style="animation-delay:${(delay += 60)}ms"`;
+
+  const actions = [
+    C.phone     && { k:'call',      icon:'phone',     href:`tel:${C.phone}` },
+    C.whatsapp  && { k:'whatsapp',  icon:'whatsapp',  href:`https://wa.me/${C.whatsapp}` },
+    C.telegram  && { k:'telegram',  icon:'telegram',  href:`https://t.me/${C.telegram}` },
+    C.instagram && { k:'instagram', icon:'instagram', href:`https://instagram.com/${C.instagram}` },
+    C.email     && { k:'email',     icon:'mail',      href:`mailto:${C.email}` },
+    C.linkedin  && { k:'linkedin',  icon:'linkedin',  href:C.linkedin },
+    { k:'route', icon:'pin', href:'#office', internal:true },
+  ].filter(Boolean).slice(0, 6);
+
+  const weekOrder = [6,0,1,2,3,4,5];
+  const bbox = [lng-.006, lat-.0035, lng+.006, lat+.0035].join(',');
+
+  document.getElementById('app').innerHTML = `
+    <div class="topbar rise" ${d()}>
+      <button class="chip-btn" id="share-top" aria-label="${t('share')}">${ic('share')}${t('share')}</button>
+      <button class="chip-btn" id="lang" aria-label="Language">${ic('globe')}${t('lang')}</button>
+    </div>
+
+    <section class="hero rise" ${d()}>
+      <div class="hero-in">
+        <div class="banner">${ic('scale','watermark')}</div>
+        <div class="avatar">
+          <div class="avatar-in">${C.photo ? `<img src="${esc(C.photo)}" alt="${esc(fullName())}">` : `<span>${esc(L(C.firstName).charAt(0))}</span>`}</div>
+          <div class="verified">${ic('check')}</div>
+        </div>
+        <h1 class="name">${esc(fullName())}</h1>
+        <div class="title">${esc(L(C.title))}</div>
+        <p class="tagline">${esc(L(C.tagline))}</p>
+        <div class="status ${st.open ? 'open' : ''}"><span class="dot"></span><span>${st.text}</span></div>
+      </div>
+    </section>
+
+    <nav class="actions">
+      ${actions.map(a => `
+        <a class="act rise" ${d()} href="${a.href}" ${a.internal ? '' : 'target="_blank" rel="noopener"'}>
+          <span class="ic">${ic(a.icon)}</span>${t(a.k)}
+        </a>`).join('')}
+    </nav>
+
+    <div class="cta-row rise" ${d()}>
+      <button class="cta" id="save">${ic('userPlus')}${t('save')}</button>
+      <button class="ghost" id="share" aria-label="${t('share')}">${ic('share')}</button>
+    </div>
+
+    ${C.stats?.length ? `
+    <div class="stats">
+      ${C.stats.map(s => `<div class="stat rise" ${d()}><b data-count="${s.value}" data-suffix="${s.suffix||''}">${num(s.value)}${s.suffix||''}</b><span>${esc(L(s.label))}</span></div>`).join('')}
+    </div>` : ''}
+
+    ${L(C.about) ? `
+    <section class="sec rise" ${d()}>
+      <h2 class="sec-h">${ic('user')}${t('about')}</h2>
+      <p class="about">${esc(L(C.about))}</p>
+    </section>` : ''}
+
+    ${C.areas?.length ? `
+    <section class="sec rise" ${d()}>
+      <h2 class="sec-h">${ic('scale')}${t('areas')}</h2>
+      <div class="areas">${C.areas.map(a => `<div class="area">${ic(a.icon)}<span>${esc(L(a))}</span></div>`).join('')}</div>
+    </section>` : ''}
+
+    ${C.experience?.length ? `
+    <section class="sec rise" ${d()}>
+      <h2 class="sec-h">${ic('briefcase')}${t('exp')}</h2>
+      <div class="tl">
+        ${C.experience.map(e => `
+          <div class="tl-item">
+            <div class="tl-period">${esc(L(e.period))}</div>
+            <div class="tl-role">${esc(L(e.role))}</div>
+            ${L(e.org)  ? `<div class="tl-org">${esc(L(e.org))}</div>` : ''}
+            ${L(e.desc) ? `<div class="tl-desc">${esc(L(e.desc))}</div>` : ''}
+          </div>`).join('')}
+      </div>
+    </section>` : ''}
+
+    <section class="sec rise" id="office" ${d()}>
+      <h2 class="sec-h">${ic('clock')}${t('office')}</h2>
+      <div class="addr">${ic('pin')}<span>${esc(L(C.address))}</span></div>
+      <div class="map">
+        <iframe loading="lazy" title="map" referrerpolicy="no-referrer"
+          src="https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${lat},${lng}"></iframe>
+      </div>
+      <div class="maps">
+        <a href="https://www.google.com/maps/search/?api=1&query=${lat},${lng}" target="_blank" rel="noopener">${ic('nav')}${t('google')}</a>
+        <a href="https://neshan.org/maps/@${lat},${lng},16z,0p" target="_blank" rel="noopener">${ic('nav')}${t('neshan')}</a>
+        <a href="https://balad.ir/location?latitude=${lat}&longitude=${lng}&zoom=16" target="_blank" rel="noopener">${ic('nav')}${t('balad')}</a>
+      </div>
+      <div class="hours">
+        ${weekOrder.map(i => { const r = range(i); return `
+          <div class="hr ${i === today ? 'today' : ''}">
+            <span>${t('days')[i]}</span>
+            ${r ? `<span><bdi dir="ltr">${num(r.a)} – ${num(r.b)}</bdi></span>` : `<span class="closed">${t('closedDay')}</span>`}
+          </div>`; }).join('')}
+      </div>
+    </section>
+
+    <section class="sec rise" ${d()}>
+      <h2 class="sec-h">${ic('chat')}${t('consult')}</h2>
+      <div class="form">
+        <input class="field" id="f-name" type="text" autocomplete="name" placeholder="${t('namePh')}">
+        <textarea class="field" id="f-msg" rows="4" placeholder="${t('msgPh')}"></textarea>
+        <div class="send-row">
+          ${C.whatsapp ? `<button class="send" data-send="wa">${ic('whatsapp')}${t('sendWa')}</button>` : ''}
+          ${C.telegram ? `<button class="send" data-send="tg">${ic('telegram')}${t('sendTg')}</button>` : ''}
+          ${C.email    ? `<button class="send" data-send="mail">${ic('mail')}${t('sendMail')}</button>` : ''}
+        </div>
+        <p class="hint">${t('hint')}</p>
+      </div>
+    </section>
+
+    <footer>
+      <div class="sig">${ic('scale')}<span>${esc(fullName())}</span></div>
+      <div>${t('rights')} · ${new Intl.DateTimeFormat(lang === 'fa' ? 'fa-IR-u-ca-persian' : 'en-US', { year:'numeric' }).format(new Date())}</div>
+    </footer>
+  `;
+  bind();
+  countUp();
+}
+
+function bind(){
+  document.getElementById('lang').onclick = () => {
+    lang = lang === 'fa' ? 'en' : 'fa';
+    try { localStorage.setItem('vc-lang', lang); } catch(e){}
+    render(); window.scrollTo({ top:0 });
+  };
+  document.getElementById('save').onclick = saveContact;
+  document.getElementById('share').onclick = share;
+  document.getElementById('share-top').onclick = share;
+
+  document.querySelectorAll('[data-send]').forEach(b => b.onclick = async () => {
+    const m = buildMessage(); if (!m) return;
+    const via = b.dataset.send;
+    if (via === 'wa')   window.open(`https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(m)}`, '_blank');
+    if (via === 'mail') location.href = `mailto:${CONFIG.email}?subject=${encodeURIComponent(t('consult'))}&body=${encodeURIComponent(m)}`;
+    if (via === 'tg')  { await copy(m); toast(t('tgCopied')); setTimeout(() => window.open(`https://t.me/${CONFIG.telegram}`, '_blank'), 700); }
+  });
+}
+
+function countUp(){
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  document.querySelectorAll('[data-count]').forEach(el => {
+    const target = +el.dataset.count, suf = el.dataset.suffix, t0 = performance.now(), dur = 1400;
+    const step = now => {
+      const p = Math.min((now - t0) / dur, 1), e = 1 - Math.pow(1 - p, 3);
+      el.textContent = num(Math.round(target * e)) + suf;
+      if (p < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  });
+}
+
+function loadData(){
+  return new Promise(res => {
+    const sc = document.createElement('script');
+    sc.src = 'data.js?v=' + Date.now();          // جلوگیری از کش شدن نسخه‌ی قدیمی
+    sc.onload  = () => res(window.CARD_DATA || null);
+    sc.onerror = () => res(null);
+    document.head.appendChild(sc);
+  });
+}
+
+loadData().then(data => {
+  if (!data){
+    document.getElementById('app').innerHTML = '<p class="loading">اطلاعات کارت بارگذاری نشد.</p>';
+    return;
+  }
+  CONFIG = data;
+  CONFIG.hours = CONFIG.hours || {};
+  render();
+  setInterval(() => {               // refresh the open/closed badge every minute
+    const s = document.querySelector('.status'); if (!s) return;
+    const st = officeStatus();
+    s.classList.toggle('open', st.open);
+    s.lastElementChild.innerHTML = st.text;
+  }, 60000);
+});
+</script>
+</body>
+</html>

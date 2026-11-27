@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0b1118">
+<title>پنل مدیریت کارت ویزیت</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css">
+<style>
+:root{
+  --bg:#0b1118; --card:#121b26; --card2:#162131;
+  --line:rgba(201,165,92,.18); --line2:rgba(255,255,255,.07);
+  --gold:#c9a55c; --gold2:#ead39b; --text:#eef1f5; --muted:#8e9aab;
+  --ok:#4fc38a; --off:#e0795f;
+  --font:"Vazirmatn", Tahoma, system-ui, sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:var(--font);color:var(--text);min-height:100vh;line-height:1.7;-webkit-font-smoothing:antialiased;
+  background:radial-gradient(900px 520px at 50% -200px, rgba(201,165,92,.13), transparent 70%), var(--bg);
+  background-attachment:fixed;
+}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+svg{width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+
+/* ---------- auth screens ---------- */
+.center{min-height:100vh;display:grid;place-items:center;padding:20px}
+.box{width:100%;max-width:420px;background:var(--card);border:1px solid var(--line2);border-radius:22px;padding:28px;box-shadow:0 30px 60px -30px rgba(0,0,0,.8)}
+.box.wide{max-width:520px}
+.logo{width:58px;height:58px;border-radius:17px;display:grid;place-items:center;margin:0 auto 14px;color:var(--gold2);
+  background:linear-gradient(160deg,rgba(201,165,92,.18),rgba(201,165,92,.04));border:1px solid var(--line)}
+.logo svg{width:28px;height:28px}
+h1{font-size:19px;text-align:center}
+.sub{color:var(--muted);font-size:13px;text-align:center;margin-top:4px}
+.steps{margin:16px 0 4px;padding:14px 16px;border-radius:14px;background:rgba(201,165,92,.06);border:1px solid var(--line);font-size:12.8px;color:#c3cad5}
+.steps ol{padding-inline-start:18px}
+.steps li{margin:3px 0}
+.steps b{color:var(--gold2)}
+.steps code{display:inline-block;direction:ltr;unicode-bidi:isolate;background:rgba(255,255,255,.06);padding:1px 6px;border-radius:6px;font-size:12px}
+
+/* ---------- form controls ---------- */
+label{display:block;font-size:12.5px;color:var(--muted);margin-top:12px}
+label small{display:block;color:#6e7888;font-size:11.5px;margin-top:4px}
+.tag{display:inline-block;font-size:10px;padding:0 6px;border-radius:6px;margin-inline-start:4px;color:var(--gold);border:1px solid var(--line);vertical-align:1px}
+input,textarea,select{
+  display:block;width:100%;margin-top:6px;padding:11px 13px;border-radius:12px;font:inherit;font-size:14px;color:var(--text);
+  background:rgba(255,255,255,.03);border:1px solid var(--line2);outline:none;transition:border-color .2s, background .2s
+}
+textarea{resize:vertical;line-height:1.8}
+select{appearance:none;background-image:none}
+select option{background:var(--card);color:var(--text)}
+input:focus,textarea:focus,select:focus{border-color:var(--gold);background:rgba(201,165,92,.04)}
+input[type=time]{color-scheme:dark}
+input[type=checkbox]{width:18px;height:18px;margin:0;accent-color:var(--gold);display:inline-block}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:44px;padding:0 18px;border-radius:12px;font-weight:600;font-size:14px;
+  border:1px solid var(--line);background:rgba(255,255,255,.03);color:var(--text);transition:.2s;white-space:nowrap}
+.btn:hover{background:rgba(201,165,92,.08)}
+.btn.primary{background:linear-gradient(135deg,var(--gold2),var(--gold) 60%,#a8843f);color:#18130a;border:0;box-shadow:0 10px 24px -12px rgba(201,165,92,.7)}
+.btn.primary:hover{filter:brightness(1.06)}
+.btn.sm{height:38px;padding:0 13px;font-size:13px}
+.btn.icon{width:38px;padding:0}
+.btn:disabled{opacity:.55;cursor:default}
+.btn.block{width:100%;margin-top:18px}
+.link{display:block;margin:12px auto 0;font-size:12.5px;color:var(--muted);text-decoration:underline;text-underline-offset:4px}
+.err{color:var(--off);font-size:13px;min-height:22px;margin-top:10px;text-align:center}
+
+/* ---------- editor ---------- */
+.bar{position:sticky;top:0;z-index:20;background:rgba(11,17,24,.86);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line2)}
+.bar-in{max-width:780px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;gap:10px;position:relative}
+.brand{display:flex;gap:9px;align-items:center;font-weight:700;font-size:14px;white-space:nowrap;min-width:0}
+@media (max-width:460px){ .bar-act .lbl{display:none} .bar-act a.btn{width:38px;padding:0} }
+.brand svg{color:var(--gold)}
+.brand .dot{width:8px;height:8px;border-radius:50%;background:var(--gold);box-shadow:0 0 0 4px rgba(201,165,92,.18);display:none}
+.brand.dirty .dot{display:inline-block}
+.bar-act{display:flex;gap:8px;align-items:center}
+.menu{position:absolute;inset-inline-end:16px;top:56px;min-width:210px;padding:6px;border-radius:14px;background:var(--card2);border:1px solid var(--line);box-shadow:0 20px 40px rgba(0,0,0,.5)}
+.menu button{display:flex;align-items:center;gap:10px;width:100%;padding:10px 12px;border-radius:10px;font-size:13.5px;text-align:start}
+.menu button:hover{background:rgba(201,165,92,.1)}
+.menu svg{width:17px;height:17px;color:var(--gold)}
+.menu hr{border:0;border-top:1px solid var(--line2);margin:4px 0}
+
+.ed{max-width:780px;margin:0 auto;padding:14px 16px 90px}
+.conn{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--muted);padding:10px 14px;border-radius:12px;background:rgba(255,255,255,.025);border:1px solid var(--line2)}
+.conn i{width:8px;height:8px;border-radius:50%;background:var(--ok);flex:none}
+.conn.off i{background:var(--off)}
+.conn bdi{color:var(--text);direction:ltr}
+.sec{background:var(--card);border:1px solid var(--line2);border-radius:20px;padding:18px;margin-top:14px}
+.sec>h2{font-size:15px;display:flex;gap:9px;align-items:center}
+.sec>h2 svg{color:var(--gold)}
+.sec>p{font-size:12.5px;color:var(--muted);margin-top:2px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0 12px}
+@media (max-width:600px){ .grid2,.grid3{grid-template-columns:1fr} }
+
+.item{border:1px dashed var(--line);border-radius:16px;padding:12px 14px 14px;margin-top:12px;background:rgba(255,255,255,.012)}
+.item-h{display:flex;justify-content:space-between;align-items:center;font-size:12.5px;color:var(--gold)}
+.ops{display:flex;gap:4px}
+.ops button{width:30px;height:30px;border-radius:9px;border:1px solid var(--line2);display:grid;place-items:center;color:var(--muted)}
+.ops button:hover:not(:disabled){color:var(--gold2);border-color:var(--line)}
+.ops button.del:hover{color:var(--off)}
+.ops button:disabled{opacity:.3;cursor:default}
+.ops svg{width:15px;height:15px}
+.add{width:100%;margin-top:12px;border-style:dashed}
+.icon-row{display:grid;grid-template-columns:46px 1fr;gap:10px;align-items:end}
+.icon-pv{height:44px;border-radius:12px;display:grid;place-items:center;color:var(--gold2);background:rgba(201,165,92,.08);border:1px solid var(--line)}
+
+.day{display:grid;grid-template-columns:120px 1fr 1fr;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line2)}
+.day:last-child{border-bottom:0}
+.day .d{display:flex;align-items:center;gap:9px;font-size:13.5px;cursor:pointer}
+.day input[type=time]{margin:0;padding:8px 10px}
+.day.off input[type=time]{opacity:.3;pointer-events:none}
+@media (max-width:420px){ .day{grid-template-columns:1fr 1fr} .day .d{grid-column:1/-1} }
+
+.photo{display:flex;gap:16px;align-items:center;margin-top:12px}
+.pv{width:84px;height:84px;border-radius:50%;flex:none;overflow:hidden;display:grid;place-items:center;padding:3px;
+  background:conic-gradient(from 200deg,var(--gold2),var(--gold),#7d6232,var(--gold),var(--gold2))}
+.pv>div{width:100%;height:100%;border-radius:50%;overflow:hidden;display:grid;place-items:center;background:#0f1721;border:3px solid var(--card)}
+.pv img{width:100%;height:100%;object-fit:cover}
+.pv span{font-size:30px;font-weight:800;color:var(--gold2)}
+.photo .btns{display:flex;flex-wrap:wrap;gap:8px}
+.photo small{display:block;font-size:11.5px;color:#6e7888;margin-top:6px}
+
+/* ---------- modal & toast ---------- */
+.modal{position:fixed;inset:0;z-index:40;background:rgba(5,8,12,.7);backdrop-filter:blur(4px);display:grid;place-items:center;padding:20px}
+.modal .box h3{font-size:16px;margin-bottom:4px}
+.row{display:flex;gap:8px;margin-top:18px}
+.row .btn{flex:1}
+.toast{
+  position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom));transform:translate(-50%,20px);max-width:calc(100% - 32px);
+  padding:11px 18px;border-radius:14px;background:#f2e6c6;color:#1a140a;font-size:13px;font-weight:600;text-align:center;
+  box-shadow:0 10px 30px rgba(0,0,0,.4);opacity:0;pointer-events:none;transition:.3s;z-index:60
+}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.toast.bad{background:#f4c9bd;color:#3a120a}
+.spin{width:34px;height:34px;border-radius:50%;border:2px solid var(--line);border-top-color:var(--gold);animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<div id="view"><div class="center"><span class="spin"></span></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* =====================================================================
+   پنل مدیریت کارت ویزیت — بدون سرور، مناسب GitHub Pages
+   - ورود: نام کاربری و هش رمز (PBKDF2) در auth.js
+   - توکن گیت‌هاب با همان رمز (AES-GCM) رمزنگاری و در auth.js ذخیره می‌شود
+   - ذخیره: فایل data.js مستقیماً از طریق GitHub API در مخزن commit می‌شود
+   ===================================================================== */
+const ITER = 210000;
+const view = document.getElementById('view');
+
+let AUTH = null, DATA = null;
+let PASSWORD = null, TOKEN = null, REPO = null;
+let dirty = false, pendingPhoto = null;
+
+/* ---------- icons ---------- */
+const I = {
+  scale:'<path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10M12 3v18M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/>',
+  user:'<circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1"/>',
+  phone:'<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>',
+  pin:'<path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>',
+  clock:'<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>',
+  chart:'<path d="M3 3v18h18"/><path d="M7 16v-4M12 16V8M17 16v-7"/>',
+  briefcase:'<rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>',
+  lock:'<rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>',
+  github:'<path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.4 5.4 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/>',
+  download:'<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5M12 15V3"/>',
+  logout:'<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5M21 12H9"/>',
+  eye:'<path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/>',
+  more:'<circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/>',
+  up:'<path d="m18 15-6-6-6 6"/>', down:'<path d="m6 9 6 6 6-6"/>', x:'<path d="M18 6 6 18M6 6l12 12"/>',
+  plus:'<path d="M12 5v14M5 12h14"/>', save:'<path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><path d="M17 21v-8H7v8M7 3v5h8"/>',
+  image:'<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.09-3.09a2 2 0 0 0-2.82 0L6 21"/>',
+  pen:'<path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/>',
+  drop:'<path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/>',
+  ship:'<path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.76"/><path d="M19 13V7a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v6M12 10v4M12 2v3"/>',
+  gavel:'<path d="m14.5 12.5-8 8a2.12 2.12 0 1 1-3-3l8-8"/><path d="m16 16 6-6M8 8l6-6M9 7l8 8M21 11l-8-8"/>',
+  building:'<path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2M10 6h4M10 10h4M10 14h4M10 18h4"/>',
+  home:'<path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/>',
+  globe:'<circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20M2 12h20"/>',
+  chat:'<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
+  mail:'<rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>'
+};
+const ic = n => `<svg viewBox="0 0 24 24" aria-hidden="true">${I[n] || ''}</svg>`;
+const AREA_ICONS = { pen:'قلم / قرارداد', drop:'نفت و انرژی', ship:'کشتی و حمل', gavel:'دعاوی', building:'شرکت', home:'ملک',
+  scale:'ترازو', briefcase:'کیف کار', globe:'بین‌الملل', user:'شخص', chat:'گفتگو', mail:'نامه' };
+const DAYS = ['یکشنبه','دوشنبه','سه‌شنبه','چهارشنبه','پنجشنبه','جمعه','شنبه'];
+const WEEK = [6,0,1,2,3,4,5];
+
+/* ---------- utils ---------- */
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const getP = (o, p) => p.split('.').reduce((a, k) => a == null ? a : a[k], o);
+function setP(o, p, v){
+  const ks = p.split('.'); let a = o;
+  ks.slice(0, -1).forEach((k, i) => { if (a[k] == null) a[k] = /^\d+$/.test(ks[i+1]) ? [] : {}; a = a[k]; });
+  a[ks[ks.length - 1]] = v;
+}
+function toast(msg, bad=false){
+  const el = document.getElementById('toast');
+  el.textContent = msg; el.classList.toggle('bad', bad); el.classList.add('show');
+  clearTimeout(toast._t); toast._t = setTimeout(() => el.classList.remove('show'), bad ? 5000 : 3200);
+}
+function loadScript(src){
+  return new Promise(res => {
+    const s = document.createElement('script');
+    s.src = src + '?v=' + Date.now();
+    s.onload = () => res(true); s.onerror = () => res(false);
+    document.head.appendChild(s);
+  });
+}
+function markDirty(v=true){ dirty = v; document.querySelector('.brand')?.classList.toggle('dirty', v); }
+window.addEventListener('beforeunload', e => { if (dirty){ e.preventDefault(); e.returnValue = ''; } });
+
+/* ---------- base64 & crypto ---------- */
+const enc = new TextEncoder();
+function bytesToB64(bytes){
+  bytes = new Uint8Array(bytes); let s = '';
+  for (let i = 0; i < bytes.length; i += 0x8000) s += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
+  return btoa(s);
+}
+const b64ToBytes = b64 => Uint8Array.from(atob(b64.replace(/\s/g, '')), c => c.charCodeAt(0));
+const utf8ToB64 = s => bytesToB64(enc.encode(s));
+const b64ToUtf8 = b64 => new TextDecoder().decode(b64ToBytes(b64));
+const rand = n => crypto.getRandomValues(new Uint8Array(n));
+
+async function baseKey(pw){ return crypto.subtle.importKey('raw', enc.encode(pw), 'PBKDF2', false, ['deriveBits', 'deriveKey']); }
+async function pwHash(pw, salt, iter){
+  const bits = await crypto.subtle.deriveBits({ name:'PBKDF2', hash:'SHA-256', salt, iterations:iter }, await baseKey(pw), 256);
+  return bytesToB64(bits);
+}
+async function aesKey(pw, salt, iter){
+  return crypto.subtle.deriveKey({ name:'PBKDF2', hash:'SHA-256', salt, iterations:iter }, await baseKey(pw),
+    { name:'AES-GCM', length:256 }, false, ['encrypt', 'decrypt']);
+}
+async function makeAuth(user, pw, token, repo){
+  const salt = rand(16), out = { user, iter:ITER, salt:bytesToB64(salt), hash:await pwHash(pw, salt, ITER), repo:repo || null, token:null };
+  if (token){
+    const tsalt = rand(16), iv = rand(12);
+    const ct = await crypto.subtle.encrypt({ name:'AES-GCM', iv }, await aesKey(pw, tsalt, ITER), enc.encode(token));
+    out.token = { salt:bytesToB64(tsalt), iv:bytesToB64(iv), ct:bytesToB64(ct) };
+  }
+  return out;
+}
+async function decryptToken(pw, t, iter){
+  const pt = await crypto.subtle.decrypt({ name:'AES-GCM', iv:b64ToBytes(t.iv) }, await aesKey(pw, b64ToBytes(t.salt), iter), b64ToBytes(t.ct));
+  return new TextDecoder().decode(pt);
+}
+const serializeAuth = a => `/* تولید شده توسط admin.html — دستی ویرایش نکنید */\nwindow.CARD_AUTH = ${JSON.stringify(a, null, 2)};\n`;
+const serializeData = d => `window.CARD_DATA = ${JSON.stringify(d, null, 2)};\n`;
+
+/* ---------- GitHub API ---------- */
+async function gh(path, opts={}, repo=REPO, token=TOKEN){
+  let r;
+  try {
+    r = await fetch(`https://api.github.com/repos/${repo.owner}/${repo.name}/${path}`, {
+      ...opts,
+      headers:{ Authorization:`Bearer ${token}`, Accept:'application/vnd.github+json', 'X-GitHub-Api-Version':'2022-11-28',
+                ...(opts.body ? { 'Content-Type':'application/json' } : {}) }
+    });
+  } catch(e){ const er = new Error('network'); er.status = 0; throw er; }
+  if (!r.ok){ const er = new Error('http ' + r.status); er.status = r.status; throw er; }
+  return r.status === 204 ? null : r.json();
+}
+async function getFile(p, repo=REPO, token=TOKEN){
+  try { return await gh(`contents/${p}?ref=${encodeURIComponent(repo.branch)}&t=${Date.now()}`, {}, repo, token); }
+  catch(e){ if (e.status === 404) return null; throw e; }
+}
+async function putFile(p, b64, message, repo=REPO, token=TOKEN){
+  const cur = await getFile(p, repo, token);
+  return gh(`contents/${p}`, { method:'PUT', body:JSON.stringify({ message, content:b64, branch:repo.branch, ...(cur ? { sha:cur.sha } : {}) }) }, repo, token);
+}
+function ghError(e){
+  if (e.status === 0)   return 'اتصال به گیت‌هاب برقرار نشد. اینترنت را بررسی کنید.';
+  if (e.status === 401) return 'توکن نامعتبر است یا منقضی شده. از منو «اتصال مجدد گیت‌هاب» را بزنید.';
+  if (e.status === 403) return 'توکن اجازه‌ی نوشتن ندارد. دسترسی Contents: Read and write لازم است.';
+  if (e.status === 404) return 'مخزن یا شاخه پیدا نشد، یا توکن به این مخزن دسترسی ندارد.';
+  if (e.status === 409 || e.status === 422) return 'تداخل در ذخیره. چند ثانیه بعد دوباره تلاش کنید.';
+  return 'خطای گیت‌هاب: ' + (e.status || e.message);
+}
+function guessRepo(){
+  const h = location.hostname;
+  if (h.endsWith('.github.io')){
+    const owner = h.split('.')[0];
+    const seg = location.pathname.split('/').filter(Boolean)[0];
+    return { owner, name: seg && !seg.includes('.') ? seg : h, branch:'main' };
+  }
+  return { owner:'', name:'', branch:'main' };
+}
+
+/* =================================================================
+   LOGIN
+   ================================================================= */
+function renderLogin(){
+  view.innerHTML = `
+  <div class="center">
+    <form class="box" id="f" autocomplete="on">
+      <div class="logo">${ic('lock')}</div>
+      <h1>ورود به پنل مدیریت</h1>
+      <p class="sub">ویرایش اطلاعات کارت ویزیت دیجیتال</p>
+      <label>نام کاربری<input name="u" dir="ltr" autocomplete="username" autocapitalize="off" spellcheck="false" required></label>
+      <label>رمز عبور<input name="p" type="password" dir="ltr" autocomplete="current-password" required></label>
+      <button class="btn primary block" id="go">ورود</button>
+      <p class="err" id="err"></p>
+      <a class="link" href="index.html">بازگشت به کارت</a>
+    </form>
+  </div>`;
+  const f = document.getElementById('f'), go = document.getElementById('go'), err = document.getElementById('err');
+  f.u.focus();
+  f.onsubmit = async e => {
+    e.preventDefault(); err.textContent = ''; go.disabled = true; go.textContent = 'در حال بررسی…';
+    const u = f.u.value.trim(), p = f.p.value;
+    const ok = u === AUTH.user && await pwHash(p, b64ToBytes(AUTH.salt), AUTH.iter) === AUTH.hash;
+    if (!ok){
+      await new Promise(r => setTimeout(r, 900));
+      err.textContent = 'نام کاربری یا رمز عبور اشتباه است.'; go.disabled = false; go.textContent = 'ورود'; f.p.select(); return;
+    }
+    PASSWORD = p;
+    if (AUTH.token && AUTH.repo){
+      try { TOKEN = await decryptToken(p, AUTH.token, AUTH.iter); REPO = AUTH.repo; }
+      catch(_){ err.textContent = 'رمزگشایی توکن ناموفق بود. دوباره به گیت‌هاب متصل شوید.'; return renderSetup(); }
+      await openEditor();
+    } else {
+      renderSetup();
+    }
+  };
+}
+
+/* =================================================================
+   SETUP (one-time GitHub connection)
+   ================================================================= */
+function renderSetup(){
+  const g = AUTH.repo || guessRepo();
+  view.innerHTML = `
+  <div class="center">
+    <form class="box wide" id="f">
+      <div class="logo">${ic('github')}</div>
+      <h1>اتصال به گیت‌هاب (یک‌بار)</h1>
+      <p class="sub">برای اینکه تغییرات روی سایت منتشر شود، پنل باید اجازه‌ی نوشتن در مخزن را داشته باشد.</p>
+      <div class="steps"><ol>
+        <li>در گیت‌هاب: <b>Settings › Developer settings › Personal access tokens › Fine-grained tokens</b> و بعد <b>Generate new token</b></li>
+        <li>در <b>Repository access</b> فقط همین مخزن را انتخاب کنید.</li>
+        <li>در <b>Permissions › Contents</b> گزینه‌ی <code>Read and write</code> را بدهید.</li>
+        <li>توکن ساخته‌شده (<code>github_pat_…</code>) را پایین وارد کنید.</li>
+      </ol></div>
+      <div class="grid3">
+        <label>نام کاربری گیت‌هاب<input name="owner" dir="ltr" value="${esc(g.owner)}" required spellcheck="false"></label>
+        <label>نام مخزن<input name="name" dir="ltr" value="${esc(g.name)}" required spellcheck="false"></label>
+        <label>شاخه<input name="branch" dir="ltr" value="${esc(g.branch || 'main')}" required spellcheck="false"></label>
+      </div>
+      <label>توکن دسترسی<input name="token" type="password" dir="ltr" placeholder="github_pat_..." required autocomplete="off"></label>
+      <button class="btn primary block" id="go">${ic('github')}اتصال و ذخیره</button>
+      <p class="err" id="err"></p>
+      <button type="button" class="link" id="offline">فعلاً بدون اتصال ادامه بده (فقط ویرایش و دانلود فایل)</button>
+    </form>
+  </div>`;
+  const f = document.getElementById('f'), go = document.getElementById('go'), err = document.getElementById('err');
+  document.getElementById('offline').onclick = () => { TOKEN = null; REPO = null; openEditor(); };
+  f.onsubmit = async e => {
+    e.preventDefault(); err.textContent = ''; go.disabled = true; go.textContent = 'در حال اتصال…';
+    const repo = { owner:f.owner.value.trim(), name:f.name.value.trim(), branch:f.branch.value.trim() || 'main' };
+    const token = f.token.value.trim();
+    try {
+      await gh('', {}, repo, token);                         // repo reachable with this token?
+      const newAuth = await makeAuth(AUTH.user, PASSWORD, token, repo);
+      await putFile('auth.js', utf8ToB64(serializeAuth(newAuth)), 'Connect admin panel', repo, token); // proves write access
+      AUTH = newAuth; TOKEN = token; REPO = repo;
+      toast('اتصال برقرار شد ✓');
+      await openEditor();
+    } catch(ex){
+      err.textContent = ghError(ex); go.disabled = false; go.innerHTML = `${ic('github')}اتصال و ذخیره`;
+    }
+  };
+}
+
+/* =================================================================
+   EDITOR
+   ================================================================= */
+async function openEditor(){
+  view.innerHTML = '<div class="center"><span class="spin"></span></div>';
+  DATA = null;
+  if (TOKEN){
+    try {
+      const f = await getFile('data.js');
+      if (f) DATA = JSON.parse(b64ToUtf8(f.content).replace(/^[\s\S]*?=/, '').trim().replace(/;\s*$/, ''));
+    } catch(e){ toast(ghError(e), true); }
+  }
+  if (!DATA){ await loadScript('data.js'); DATA = structuredClone(window.CARD_DATA || {}); }
+  ['stats','areas','experience'].forEach(k => { if (!Array.isArray(DATA[k])) DATA[k] = []; });
+  DATA.hours = DATA.hours || {}; DATA.location = DATA.location || { lat:35.6892, lng:51.3890 };
+  pendingPhoto = null; markDirty(false);
+  renderEditor();
+}
+
+/* field builders */
+function bi(label, p, { area=false, ph='' } = {}){
+  const one = lg => {
+    const v = esc(getP(DATA, `${p}.${lg}`)), dir = lg === 'en' ? 'ltr' : 'rtl';
+    return area ? `<textarea rows="4" dir="${dir}" data-p="${p}.${lg}" placeholder="${ph}">${v}</textarea>`
+                : `<input dir="${dir}" data-p="${p}.${lg}" value="${v}" placeholder="${ph}">`;
+  };
+  return `<div class="grid2">
+    <label>${label}<span class="tag">فارسی</span>${one('fa')}</label>
+    <label>${label}<span class="tag">EN</span>${one('en')}</label></div>`;
+}
+function fld(label, p, { type='text', dir='ltr', ph='', num=false, hint='' } = {}){
+  return `<label>${label}<input type="${type}" dir="${dir}" placeholder="${esc(ph)}" data-p="${p}" ${num ? 'data-num="1" step="any" inputmode="decimal"' : ''} value="${esc(getP(DATA, p))}">${hint ? `<small>${hint}</small>` : ''}</label>`;
+}
+const ops = (list, i, len) => `<div class="ops">
+  <button type="button" data-op="up" data-l="${list}" data-i="${i}" ${i === 0 ? 'disabled' : ''} title="بالا">${ic('up')}</button>
+  <button type="button" data-op="down" data-l="${list}" data-i="${i}" ${i === len - 1 ? 'disabled' : ''} title="پایین">${ic('down')}</button>
+  <button type="button" class="del" data-op="del" data-l="${list}" data-i="${i}" title="حذف">${ic('x')}</button></div>`;
+const sec = (icon, title, desc, body) => `<section class="sec"><h2>${ic(icon)}${title}</h2>${desc ? `<p>${desc}</p>` : ''}${body}</section>`;
+
+function photoPreview(){
+  const src = pendingPhoto || (DATA.photo ? DATA.photo : '');
+  return src ? `<img src="${esc(src)}" alt="">` : `<span>${esc((getP(DATA, 'firstName.fa') || '؟').charAt(0))}</span>`;
+}
+
+function renderEditor(){
+  const y = window.scrollY, online = !!TOKEN;
+  view.innerHTML = `
+  <header class="bar"><div class="bar-in">
+    <div class="brand ${dirty ? 'dirty' : ''}">${ic('scale')}<span>پنل مدیریت</span><span class="dot" title="تغییرات ذخیره نشده"></span></div>
+    <div class="bar-act">
+      <a class="btn sm" href="index.html" target="_blank">${ic('eye')}<span class="lbl">مشاهده</span></a>
+      <button class="btn primary sm" id="save">${online ? ic('save') + 'ذخیره و انتشار' : ic('download') + 'دانلود data.js'}</button>
+      <button class="btn sm icon" id="menuBtn" aria-label="منو">${ic('more')}</button>
+    </div>
+    <div class="menu" id="menu" hidden>
+      <button data-m="backup">${ic('download')}دانلود نسخه‌ی پشتیبان</button>
+      <button data-m="pass">${ic('lock')}تغییر رمز عبور</button>
+      <button data-m="repo">${ic('github')}اتصال مجدد گیت‌هاب</button>
+      <hr><button data-m="logout">${ic('logout')}خروج</button>
+    </div>
+  </div></header>
+
+  <main class="ed">
+    <div class="conn ${online ? '' : 'off'}"><i></i>${online
+      ? `متصل به مخزن <bdi>${esc(REPO.owner)}/${esc(REPO.name)}</bdi> — تغییرات حدود یک دقیقه بعد از ذخیره روی سایت دیده می‌شود.`
+      : 'بدون اتصال به گیت‌هاب — بعد از ویرایش، فایل data.js را دانلود و در مخزن جایگزین کنید.'}</div>
+
+    ${sec('user', 'اطلاعات اصلی', '', `
+      <div class="photo">
+        <div class="pv"><div id="pv">${photoPreview()}</div></div>
+        <div>
+          <div class="btns">
+            <label class="btn sm" style="margin:0">${ic('image')}انتخاب عکس<input type="file" id="photoIn" accept="image/*" hidden></label>
+            ${(DATA.photo || pendingPhoto) ? `<button type="button" class="btn sm" id="photoDel">حذف عکس</button>` : ''}
+          </div>
+          <small>${online ? 'عکس مربعی با کیفیت؛ خودکار کوچک و فشرده می‌شود.' : 'آپلود عکس فقط در حالت متصل به گیت‌هاب ممکن است.'}</small>
+        </div>
+      </div>
+      ${bi('نام', 'firstName')}
+      ${bi('نام خانوادگی', 'lastName')}
+      ${bi('عنوان', 'title', { ph:'مثلاً وکیل پایه یک دادگستری' })}
+      ${bi('شعار / توضیح کوتاه', 'tagline')}
+      ${bi('نام دفتر / سازمان', 'org')}
+    `)}
+
+    ${sec('phone', 'راه‌های ارتباطی', 'هر فیلدی را خالی بگذارید، دکمه‌اش از کارت حذف می‌شود.', `
+      <div class="grid2">
+        ${fld('شماره تماس', 'phone', { type:'tel', ph:'+989120000000', hint:'با کد کشور و بدون فاصله' })}
+        ${fld('واتساپ', 'whatsapp', { ph:'989120000000', hint:'بدون + و بدون صفر اول' })}
+        ${fld('آیدی تلگرام', 'telegram', { ph:'username', hint:'بدون @' })}
+        ${fld('آیدی اینستاگرام', 'instagram', { ph:'username', hint:'بدون @' })}
+        ${fld('ایمیل', 'email', { type:'email', ph:'name@example.com' })}
+        ${fld('لینکدین', 'linkedin', { type:'url', ph:'https://linkedin.com/in/...' })}
+      </div>
+    `)}
+
+    ${sec('pin', 'آدرس و موقعیت', '', `
+      ${bi('آدرس', 'address', { area:true })}
+      <div class="grid2">
+        ${fld('عرض جغرافیایی (lat)', 'location.lat', { num:true, ph:'35.7575' })}
+        ${fld('طول جغرافیایی (lng)', 'location.lng', { num:true, ph:'51.4100' })}
+      </div>
+      <label><small>در گوگل‌مپ روی محل دفتر کلیک راست کنید؛ عدد اول lat و عدد دوم lng است.</small></label>
+    `)}
+
+    ${sec('clock', 'ساعات کاری', 'به وقت تهران. روزهای تعطیل را غیرفعال کنید.', `
+      <div style="margin-top:8px">${WEEK.map(d => {
+        const r = DATA.hours[d], [a, b] = r ? r.split('-') : ['09:00', '17:00'];
+        return `<div class="day ${r ? '' : 'off'}" data-day="${d}">
+          <label class="d" style="margin:0;color:var(--text)"><input type="checkbox" ${r ? 'checked' : ''}>${DAYS[d]}</label>
+          <input type="time" value="${a}" dir="ltr"><input type="time" value="${b}" dir="ltr">
+        </div>`; }).join('')}</div>
+    `)}
+
+    ${sec('user', 'درباره من', '', bi('متن معرفی', 'about', { area:true }))}
+
+    ${sec('chart', 'آمار', 'مثلاً سال‌های سابقه یا تعداد پرونده‌ها. حداکثر ۳ مورد پیشنهاد می‌شود.', `
+      ${DATA.stats.map((s, i) => `
+        <div class="item"><div class="item-h"><span>آمار ${i + 1}</span>${ops('stats', i, DATA.stats.length)}</div>
+          <div class="grid2">${fld('عدد', `stats.${i}.value`, { type:'number', num:true })}${fld('پسوند', `stats.${i}.suffix`, { ph:'+' })}</div>
+          ${bi('عنوان', `stats.${i}.label`)}
+        </div>`).join('')}
+      <button type="button" class="btn add" data-op="add" data-l="stats">${ic('plus')}افزودن آمار</button>
+    `)}
+
+    ${sec('scale', 'حوزه‌های تخصصی', '', `
+      ${DATA.areas.map((a, i) => `
+        <div class="item"><div class="item-h"><span>حوزه ${i + 1}</span>${ops('areas', i, DATA.areas.length)}</div>
+          <div class="icon-row">
+            <div class="icon-pv">${ic(a.icon)}</div>
+            <label>آیکون<select data-p="areas.${i}.icon">${Object.entries(AREA_ICONS).map(([k, v]) => `<option value="${k}" ${a.icon === k ? 'selected' : ''}>${v}</option>`).join('')}</select></label>
+          </div>
+          ${bi('عنوان', `areas.${i}`)}
+        </div>`).join('')}
+      <button type="button" class="btn add" data-op="add" data-l="areas">${ic('plus')}افزودن حوزه</button>
+    `)}
+
+    ${sec('briefcase', 'سوابق حرفه‌ای و تحصیلات', 'به ترتیب نمایش؛ مورد اول برجسته نشان داده می‌شود.', `
+      ${DATA.experience.map((x, i) => `
+        <div class="item"><div class="item-h"><span>سابقه ${i + 1}</span>${ops('experience', i, DATA.experience.length)}</div>
+          ${bi('بازه زمانی', `experience.${i}.period`, { ph:'۱۳۹۸ — اکنون' })}
+          ${bi('سمت / مدرک', `experience.${i}.role`)}
+          ${bi('سازمان / دانشگاه', `experience.${i}.org`)}
+          ${bi('توضیح', `experience.${i}.desc`, { area:true })}
+        </div>`).join('')}
+      <button type="button" class="btn add" data-op="add" data-l="experience">${ic('plus')}افزودن سابقه</button>
+    `)}
+  </main>`;
+  window.scrollTo(0, y);
+  bindEditor();
+}
+
+const TEMPLATES = {
+  stats:      () => ({ value:0, suffix:'+', label:{ fa:'', en:'' } }),
+  areas:      () => ({ icon:'scale', fa:'', en:'' }),
+  experience: () => ({ period:{ fa:'', en:'' }, role:{ fa:'', en:'' }, org:{ fa:'', en:'' }, desc:{ fa:'', en:'' } }),
+};
+
+function bindEditor(){
+  const ed = view;
+  ed.oninput = e => {
+    const el = e.target, p = el.dataset.p;
+    if (p){
+      let v = el.value;
+      if (el.dataset.num){ v = v === '' ? '' : parseFloat(v); if (Number.isNaN(v)) return; }
+      setP(DATA, p, v); markDirty();
+      if (el.tagName === 'SELECT') el.closest('.icon-row').querySelector('.icon-pv').innerHTML = ic(v);
+      return;
+    }
+    const day = el.closest('.day');
+    if (day){
+      const [cb, from, to] = day.querySelectorAll('input');
+      const d = day.dataset.day;
+      if (cb.checked) DATA.hours[d] = `${from.value || '09:00'}-${to.value || '17:00'}`; else delete DATA.hours[d];
+      day.classList.toggle('off', !cb.checked); markDirty();
+    }
+  };
+  ed.onchange = ed.oninput;
+
+  ed.querySelectorAll('[data-op]').forEach(b => b.onclick = () => {
+    const list = DATA[b.dataset.l], i = +b.dataset.i;
+    switch (b.dataset.op){
+      case 'add':  list.push(TEMPLATES[b.dataset.l]()); break;
+      case 'up':   [list[i-1], list[i]] = [list[i], list[i-1]]; break;
+      case 'down': [list[i+1], list[i]] = [list[i], list[i+1]]; break;
+      case 'del':  if (!confirm('این مورد حذف شود؟')) return; list.splice(i, 1); break;
+    }
+    markDirty(); renderEditor();
+  });
+
+  const photoIn = document.getElementById('photoIn');
+  photoIn.onchange = async () => {
+    if (!TOKEN){ toast('برای آپلود عکس ابتدا به گیت‌هاب متصل شوید.', true); return; }
+    const file = photoIn.files[0]; if (!file) return;
+    try { pendingPhoto = await resizeImage(file, 640); markDirty(); renderEditor(); }
+    catch(_){ toast('این فایل تصویر قابل خواندن نیست.', true); }
+  };
+  const del = document.getElementById('photoDel');
+  if (del) del.onclick = () => { pendingPhoto = null; DATA.photo = ''; markDirty(); renderEditor(); };
+
+  document.getElementById('save').onclick = save;
+  const menu = document.getElementById('menu');
+  document.getElementById('menuBtn').onclick = e => { e.stopPropagation(); menu.hidden = !menu.hidden; };
+  document.onclick = () => { menu.hidden = true; };
+  menu.querySelectorAll('[data-m]').forEach(b => b.onclick = () => {
+    menu.hidden = true;
+    ({ backup:downloadData, pass:passwordModal, repo:() => { if (!dirty || confirm('تغییرات ذخیره‌نشده از بین می‌رود. ادامه؟')) { markDirty(false); renderSetup(); } },
+       logout:() => { if (!dirty || confirm('تغییرات ذخیره‌نشده از بین می‌رود. خارج شوید؟')) { markDirty(false); location.reload(); } } })[b.dataset.m]();
+  });
+  document.onkeydown = e => { if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's'){ e.preventDefault(); save(); } };
+}
+
+function resizeImage(file, max){
+  return new Promise((res, rej) => {
+    const img = new Image();
+    img.onload = () => {
+      const side = Math.min(img.width, img.height), size = Math.min(max, side);
+      const c = document.createElement('canvas'); c.width = c.height = size;
+      c.getContext('2d').drawImage(img, (img.width - side) / 2, (img.height - side) / 2, side, side, 0, 0, size, size); // center square crop
+      URL.revokeObjectURL(img.src);
+      res(c.toDataURL('image/jpeg', 0.86));
+    };
+    img.onerror = rej;
+    img.src = URL.createObjectURL(file);
+  });
+}
+
+function downloadData(){
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([serializeData(DATA)], { type:'text/javascript;charset=utf-8' }));
+  a.download = 'data.js'; document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+  if (!TOKEN) markDirty(false);
+}
+
+async function save(){
+  if (!TOKEN) return downloadData();
+  const btn = document.getElementById('save');
+  btn.disabled = true; btn.textContent = 'در حال ذخیره…';
+  try {
+    if (pendingPhoto){
+      await putFile('photo.jpg', pendingPhoto.split(',')[1], 'Update profile photo');
+      DATA.photo = 'photo.jpg?v=' + Date.now(); pendingPhoto = null;
+    }
+    await putFile('data.js', utf8ToB64(serializeData(DATA)), 'Update business card content');
+    markDirty(false);
+    toast('ذخیره شد ✓ حدود یک دقیقه بعد روی سایت دیده می‌شود.');
+    renderEditor();
+  } catch(e){
+    toast(ghError(e), true);
+    btn.disabled = false; btn.innerHTML = ic('save') + 'ذخیره و انتشار';
+  }
+}
+
+function passwordModal(){
+  if (!TOKEN){ toast('برای تغییر رمز باید به گیت‌هاب متصل باشید.', true); return; }
+  const m = document.createElement('div'); m.className = 'modal';
+  m.innerHTML = `<form class="box">
+    <h3>تغییر رمز عبور</h3><p class="sub" style="text-align:start">حداقل ۱۰ کاراکتر؛ ترکیب حروف، عدد و نماد.</p>
+    <label>رمز فعلی<input name="cur" type="password" dir="ltr" autocomplete="current-password" required></label>
+    <label>رمز جدید<input name="n1" type="password" dir="ltr" autocomplete="new-password" required minlength="10"></label>
+    <label>تکرار رمز جدید<input name="n2" type="password" dir="ltr" autocomplete="new-password" required minlength="10"></label>
+    <p class="err" id="perr"></p>
+    <div class="row"><button type="button" class="btn" id="cancel">انصراف</button><button class="btn primary" id="ok">ذخیره رمز</button></div>
+  </form>`;
+  document.body.appendChild(m);
+  const f = m.querySelector('form'), perr = m.querySelector('#perr'), ok = m.querySelector('#ok');
+  m.querySelector('#cancel').onclick = () => m.remove();
+  m.onclick = e => { if (e.target === m) m.remove(); };
+  f.cur.focus();
+  f.onsubmit = async e => {
+    e.preventDefault(); perr.textContent = '';
+    if (f.cur.value !== PASSWORD) return perr.textContent = 'رمز فعلی اشتباه است.';
+    if (f.n1.value.length < 10) return perr.textContent = 'رمز جدید باید حداقل ۱۰ کاراکتر باشد.';
+    if (f.n1.value !== f.n2.value) return perr.textContent = 'تکرار رمز با رمز جدید یکسان نیست.';
+    ok.disabled = true; ok.textContent = 'در حال ذخیره…';
+    try {
+      const newAuth = await makeAuth(AUTH.user, f.n1.value, TOKEN, REPO);
+      await putFile('auth.js', utf8ToB64(serializeAuth(newAuth)), 'Change admin password');
+      AUTH = newAuth; PASSWORD = f.n1.value; m.remove();
+      toast('رمز عبور تغییر کرد ✓ (حدود یک دقیقه بعد فعال می‌شود)');
+    } catch(ex){ perr.textContent = ghError(ex); ok.disabled = false; ok.textContent = 'ذخیره رمز'; }
+  };
+}
+
+/* =================================================================
+   BOOT
+   ================================================================= */
+(async () => {
+  if (!window.crypto?.subtle){
+    view.innerHTML = '<div class="center"><div class="box"><h1>این مرورگر پشتیبانی نمی‌شود</h1><p class="sub">پنل را از طریق آدرس https باز کنید.</p></div></div>';
+    return;
+  }
+  if (!await loadScript('auth.js') || !window.CARD_AUTH){
+    view.innerHTML = '<div class="center"><div class="box"><h1>فایل auth.js پیدا نشد</h1><p class="sub">این فایل باید کنار admin.html در مخزن باشد.</p></div></div>';
+    return;
+  }
+  AUTH = window.CARD_AUTH;
+  renderLogin();
+})();
+</script>
+</body>
+</html>
